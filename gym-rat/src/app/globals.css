@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap");
+body {
+  font-family: "Rubik Mono One", monospace;
+}
