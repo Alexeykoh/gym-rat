@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
 body {
-  font-family: "Rubik Mono One", monospace;
+  font-family: "Open Sans", sans-serif;
 }
+

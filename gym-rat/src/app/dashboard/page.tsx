@@ -1,3 +1,3 @@
 export default function Dashboard() {
-  return <main className="bg-gray-300">this is Dashboard</main>;
+  return <main className="">this is Dashboard</main>;
 }

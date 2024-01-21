@@ -1,3 +1,4 @@
+import Header from "@/components/header/header";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,9 +18,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={(inter.className, " flex mx-auto container p-4 bg-black text-white")}
+        className={
+          (inter.className,
+          " flex flex-col mx-auto container text-white box-border bg-zinc-800")
+        }
       >
-        {children}
+        <Header />
+        <main className="pt-20 flex shrink w-full max-h-full box-border p-4">
+          {children}
+        </main>
       </body>
     </html>
   );
