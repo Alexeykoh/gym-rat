@@ -1,9 +1,9 @@
 import CardLayout from "@/components/cardLayout/cardLayout";
 import UserCard from "@/components/userCard/userCard";
-import { connectToDb } from "@/lib/utils";
+// import { connectToDb } from "@/lib/mongodb";
 
 export default function Home() {
-  connectToDb();
+  // connectToDb();
   return (
     <div className="flex flex-col gap-6 w-full">
       <UserCard />
