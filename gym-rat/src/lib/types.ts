@@ -1,16 +1,6 @@
-export interface User {
-  id: string;
-  login: string;
-  mail: string;
-  gender_id: string;
-  first_name: string;
-  last_name: string;
-  avatar: string;
-  reg_date: string;
-  role_id: string;
-}
 
-export interface UserParameters {
+
+export interface iUserParameters {
   user_id: string;
   age: number;
   weight: number;
@@ -18,7 +8,7 @@ export interface UserParameters {
 }
 [];
 
-export interface Genders {
+export interface iGenders {
   id: string;
   name: string;
 }
