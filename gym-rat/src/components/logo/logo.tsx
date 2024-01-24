@@ -8,7 +8,7 @@ type logoProps = {};
 const Logo: FC<logoProps> = () => {
   return (
     <>
-      <div className="logo lg:flex flex-col items-center hidden ">
+      <div className="logo flex items-center justify-center">
         <Image
           className="rounded-full"
           src={icon}
