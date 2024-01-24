@@ -2,14 +2,13 @@ import {
   Exercise,
   ExerciseType,
   Exercises,
-  Genders,
   Roles,
-  User,
-  UserParameters,
   Workout,
+  iGenders,
+  iUserParameters,
 } from "./types";
 //
-export const genders: Genders[] = [
+export const genders: iGenders[] = [
   { id: "0", name: "male" },
   { id: "1", name: "female" },
 ];
@@ -19,7 +18,7 @@ export const roles: Roles[] = [
   { id: "1", name: "User" },
 ];
 
-export const mockUser: User = {
+export const mockUser: any = {
   id: "0",
   login: "alexeykoh",
   mail: "alexeykoh@mail.ru",
@@ -31,7 +30,7 @@ export const mockUser: User = {
   role_id: "0",
 };
 
-export const mockUserParams: UserParameters[] = [
+export const mockUserParams: iUserParameters[] = [
   { user_id: "0", age: 29, weight: 91, height: 193 },
 ];
 
