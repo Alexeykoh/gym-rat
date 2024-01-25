@@ -24,7 +24,7 @@ const WorkoutCard: FC<workoutCardProps> = ({
     <>
       <div
         onClick={() => router.push(`/workouts/${id}`)}
-        className="w-full h-full flex flex-col gap-4"
+        className="w-full h-full flex flex-col gap-4 max-w-96"
       >
         <div className="w-full flex gap-4 items-start">
           <div className="min-w-16 min-h-16 bg-gray-600/70 rounded-full flex items-center justify-center">
