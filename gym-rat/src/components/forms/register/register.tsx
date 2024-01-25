@@ -1,91 +1,193 @@
 "use client";
 
-import { FC, FormEvent, useState } from "react";
+import { validatePassword } from "@/lib/helpers";
+import { FC, useState } from "react";
 
 type registrationProps = {};
+interface iUserInfo {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const RegistrationForm: FC<registrationProps> = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    repeatPassword: "",
+    name: "",
+  });
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(null); // Clear previous errors when a new request starts
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    repeatPassword: "",
+    name: "",
+    registration: "",
+  });
 
-    try {
-      const formData = new FormData(event.currentTarget);
-      const response = await fetch("/api/submit", {
-        method: "POST",
-        body: formData,
-      });
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-      if (!response.ok) {
-        throw new Error("Failed to submit the data. Please try again.");
-      }
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    // Validate form data
+    let isValid = true;
+    const newErrors = {
+      email: "",
+      password: "",
+      repeatPassword: "",
+      name: "",
+      registration: "",
+    };
 
-      // Handle response if necessary
-      const data = await response.json();
-      // ...
-    } catch (error: any) {
-      // Capture the error message to display to the user
-      setError(error.message);
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+    if (!formData.email) {
+      isValid = false;
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      isValid = false;
+      newErrors.email = "Email is not valid";
     }
-  }
+
+    if (!formData.password) {
+      isValid = false;
+      newErrors.password = "Password is required";
+    }
+
+    if (!validatePassword(formData.password)) {
+      isValid = false;
+      newErrors.password = "Password does not meet the requirements";
+    }
+
+    if (formData.password !== formData.repeatPassword) {
+      isValid = false;
+      newErrors.repeatPassword = "Passwords do not match";
+    }
+
+    if (!formData.name) {
+      isValid = false;
+      newErrors.name = "Name is required";
+    }
+
+    if (!isValid) {
+      setErrors(newErrors);
+    } else {
+      // Form is valid, submit data to server
+      setBusy(true);
+      const res = await fetch("/api/auth/user", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      }).then((res: any) => {
+        switch (res.status) {
+          case 200:
+            res.json();
+            setBusy(false);
+            break;
+          case 409:
+            newErrors.registration = "User already exist";
+            console.log("409");
+            setBusy(false);
+            break;
+          default:
+            break;
+        }
+        if (res.status === 200) {
+        }
+        //
+        setErrors(newErrors);
+      });
+    }
+  };
 
   return (
-    <>
-      <form onSubmit={onSubmit} className="w-full flex flex-col gap-8 p-4">
-        <h1 className="text-4xl font-bold">Registration</h1>
-        <div className="flex flex-col w-full">
-          <p className=" p-2">Login / Username</p>
-          <input
-            className="rounded-xl text-black w-full p-3"
-            type="text"
-            name="Login / Username"
-            placeholder="Login / Username..."
-          />
-        </div>
-        <div className="flex flex-col w-full">
-          <p className=" p-2">Email</p>
-          <input
-            className="rounded-xl text-black w-full p-3"
-            type="text"
-            name="Email"
-            placeholder="Email..."
-          />
-        </div>
-        <div className="flex flex-col w-full">
-          <p className=" p-2">Password</p>
-          <input
-            className="rounded-xl text-black w-full p-3"
-            type="text"
-            name="password"
-            placeholder="Password..."
-          />
-        </div>
-        <div className="flex flex-col w-full">
-          <p className=" p-2">Password repeat*</p>
-          <input
-            className="rounded-xl text-black w-full p-3"
-            type="text"
-            name="password_repeat"
-            placeholder="Password repeat..."
-          />
-        </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="bg-lime-400 p-3 mt-4 rounded-xl text-xl text-black"
-        >
-          {isLoading ? "Loading..." : "Registration"}
-        </button>
-      </form>
-    </>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-96 w-full flex flex-col gap-8 p-4"
+    >
+      <h1 className="text-4xl font-bold">Registration</h1>
+      <div className="flex flex-col w-full">
+        <label className="p-2">Name</label>
+        <input
+          autoComplete="given-name"
+          className="rounded-xl text-black w-full p-3"
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+        <div className="error text-red-400">{errors.name}</div>
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="p-2">Email</label>
+        <input
+          autoComplete="email"
+          className="rounded-xl text-black w-full p-3"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <div className="error text-red-400">{errors.email}</div>
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="p-2">Password</label>
+
+        <input
+          autoComplete="new-password"
+          className="rounded-xl text-black w-full p-3"
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <div className="error text-red-400">{errors.password}</div>
+        {errors.password && (
+          <div>
+            <p className="text-xs text-red-300">
+              Ensures minimum length of 8 characters
+            </p>
+            <p className="text-xs text-red-300">
+              Ensures at least one uppercase letter
+            </p>
+            <p className="text-xs text-red-300">
+              Ensures at least one lowercase letter
+            </p>
+            <p className="text-xs text-red-300">Ensures at least one number</p>
+            <p className="text-xs text-red-300">
+              Ensures at least one special character
+            </p>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="p-2">Repeat Password</label>
+        <input
+          autoComplete="new-password"
+          className="rounded-xl text-black w-full p-3"
+          type="password"
+          name="repeatPassword"
+          value={formData.repeatPassword}
+          onChange={handleChange}
+        />
+        <div className="error text-red-400">{errors.repeatPassword}</div>
+      </div>
+      <button
+        type="submit"
+        className={
+          (busy ? " bg-gray-400 " : " bg-lime-400 ") +
+          " p-3 mt-4 rounded-xl text-xl text-black"
+        }
+      >
+        Register
+      </button>
+      <div className="error text-red-400">{errors.registration}</div>
+    </form>
   );
 };
 

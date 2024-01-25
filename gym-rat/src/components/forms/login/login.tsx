@@ -1,73 +1,117 @@
 "use client";
 
-import { FC, FormEvent, useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { FC, useState } from "react";
 
 type loginProps = {};
 
 const LoginForm: FC<loginProps> = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+  const { email, password } = formData;
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(null); // Clear previous errors when a new request starts
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    login: "",
+  });
 
-    try {
-      const formData = new FormData(event.currentTarget);
-      const response = await fetch("/api/submit", {
-        method: "POST",
-        body: formData,
-      });
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-      if (!response.ok) {
-        throw new Error("Failed to submit the data. Please try again.");
-      }
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    // Validate form data
+    let isValid = true;
+    const newErrors = {
+      email: "",
+      password: "",
+      login: "",
+    };
 
-      // Handle response if necessary
-      const data = await response.json();
-      // ...
-    } catch (error: any) {
-      // Capture the error message to display to the user
-      setError(error.message);
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+    if (!formData.email) {
+      isValid = false;
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      isValid = false;
+      newErrors.email = "Email is not valid";
     }
-  }
+
+    if (!formData.password) {
+      isValid = false;
+      newErrors.password = "Password is required";
+    }
+
+    if (!isValid) {
+      setErrors(newErrors);
+    } else {
+      // Form is valid, submit data to server
+      setBusy(true);
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      // if (res?.error) {
+      //   newErrors.login = res?.error;
+      // }
+      // setErrors(newErrors);
+      console.log("easy auth");
+      router.replace("/account");
+    }
+  };
 
   return (
-    <>
-      <form onSubmit={onSubmit} className="w-full flex flex-col gap-8 p-4">
-        <h1 className="text-4xl font-bold">Log in</h1>
-        <div className="flex flex-col w-full">
-          <p className=" p-2">Email</p>
-          <input
-            className="rounded-xl text-black w-full p-3"
-            type="text"
-            name="email"
-            placeholder="Email..."
-          />
-        </div>
-        <div className="flex flex-col w-full">
-          <p className=" p-2">Password</p>
-          <input
-            className="rounded-xl text-black w-full p-3"
-            type="text"
-            name="password"
-            placeholder="Password..."
-          />
-        </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="bg-lime-400 p-3 mt-4 rounded-xl text-xl text-black"
-        >
-          {isLoading ? "Loading..." : "Log in"}
-        </button>
-      </form>
-    </>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-96 w-full flex flex-col gap-8 p-4"
+    >
+      <h1 className="text-4xl font-bold">Log in</h1>
+      <div className="flex flex-col w-full">
+        <label className="p-2">Email</label>
+        <input
+          autoComplete="email"
+          className="rounded-xl text-black w-full p-3"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <div className="error text-red-400">{errors.email}</div>
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="p-2">Password</label>
+        <input
+          autoComplete="current-password"
+          className="rounded-xl text-black w-full p-3"
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <div className="error text-red-400">{errors.password}</div>
+      </div>
+      <button
+        type="submit"
+        className={
+          (busy ? " bg-gray-400 " : " bg-lime-400 ") +
+          " p-3 mt-4 rounded-xl text-xl text-black"
+        }
+      >
+        Log in
+      </button>
+      <div className="error text-red-400">{errors.login}</div>
+    </form>
   );
 };
 
