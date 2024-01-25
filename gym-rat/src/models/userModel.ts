@@ -1,26 +1,47 @@
+import bcrypt from "bcrypt";
 import mongoose, { Schema } from "mongoose";
 
 export interface iUser {
-  login: string;
   _id?: string;
   email: string;
-  // first_name?: string;
-  // last_name?: string;
-  // avatar?: string;
-  // reg_date?: string;
-  // role_id?: string;
+  password: string;
+  role: "admin" | "user";
+  avatar?: string;
+  name: string;
 }
 
 const userSchema: Schema = new Schema({
-  login: { type: String, required: true },
   email: { type: String, required: true },
-  // first_name: { type: String, required: false },
-  // last_name: { type: String, required: false },
-  // avatar: { type: String, required: false },
-  // reg_date: { type: String, required: false },
-  // role_id: { type: String, required: false },
+  password: { type: String, required: true },
+  role: { type: String, enum: ["admin", "user"], default: "user" },
+  avatar: { type: String, required: false },
+  name: { type: String, required: true },
 });
 
-const User: any = mongoose.model<iUser>("users", userSchema);
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password") || this.isNew) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(this.password as string, salt);
+      this.password = hash;
+      next();
+    } catch (error: any) {
+      next(error);
+    }
+  } else {
+    return next();
+  }
+});
 
-export default User;
+userSchema.methods.comparePassword = async function (password: any) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const UserModel: any =
+  mongoose.models.user || mongoose.model<iUser>("user", userSchema);
+
+export default UserModel;
