@@ -18,7 +18,7 @@ export const authOption: NextAuthOptions = {
           email: string;
           password: string;
         };
-        await connectMongoDB();
+        // await connectMongoDB();
         //
         const user = await UserModel.findOne({ email: email });
         if (!user) throw Error("email/password mismatch");
