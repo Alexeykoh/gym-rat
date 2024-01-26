@@ -8,19 +8,12 @@ const Account: FC<pageProps> = () => {
   const { data, status } = useSession();
   const isAuth = status === "authenticated";
   //
-  if (isAuth) {
-    return (
-      <>
-        <button
-          onClick={() => {
-            signOut();
-          }}
-        >
-          log out
-        </button>
-      </>
-    );
-  }
+
+  return (
+    <>
+      account page
+    </>
+  );
 };
 
 export default Account;
