@@ -1,9 +1,10 @@
-import connectMongoDB from "@/lib/mongodb";
+"use client";
 import Link from "next/link";
 import "./globals.css";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  connectMongoDB();
+  redirect("/sign-in");
   return (
     <div className="flex flex-col gap-6 w-screen h-screen justify-center items-center bgImage object-contain backdrop-brightness-50">
       <Link
