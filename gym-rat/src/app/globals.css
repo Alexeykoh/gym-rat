@@ -12,5 +12,5 @@ body {
   background-image: url("../../public/bg_alt.jpg");
   background-position: center;
   background-size: cover;
-  backdrop-filter: brightness(20%);
+  background-repeat: no-repeat;
 }
