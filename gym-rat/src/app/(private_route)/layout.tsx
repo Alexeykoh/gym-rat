@@ -1,3 +1,4 @@
+import Header from "@/components/header/header";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -12,5 +13,12 @@ export default async function PrivateLayout({ children }: layoutProps) {
   if (!session?.user) {
     redirect("/sign-in");
   }
-  return <>{children}</>;
+  return (
+    <>
+      <main className="container mx-auto flex flex-col w-full">
+        <Header />
+        {children}
+      </main>
+    </>
+  );
 }
