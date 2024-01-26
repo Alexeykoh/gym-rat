@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: any) {
   try {
     const params: iUser = await req.json(); // get params from request
-    // await connectMongoDB(); // connect to BD
+    await connectMongoDB(); // connect to BD
     const oldUser = await UserModel.findOne({ email: params.email }); // check that user was created
     if (oldUser) {
       return NextResponse.json(
