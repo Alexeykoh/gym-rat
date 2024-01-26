@@ -168,11 +168,13 @@ const RegistrationForm: FC<registrationProps> = () => {
             <p className="text-xs text-red-300">
               Ensures at least one uppercase letter
             </p>
-            <p className="text-xs text-red-300">
+            <p className="text-xs text-red-300 ">
               Ensures at least one lowercase letter
             </p>
-            <p className="text-xs text-red-300">Ensures at least one number</p>
-            <p className="text-xs text-red-300">
+            <p className="text-xs text-red-300 hidden">
+              Ensures at least one number
+            </p>
+            <p className="text-xs text-red-300 hidden">
               Ensures at least one special character
             </p>
           </div>
