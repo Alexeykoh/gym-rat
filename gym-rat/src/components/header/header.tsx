@@ -1,5 +1,6 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { FC } from "react";
 
 type headerProps = {};
@@ -25,6 +26,7 @@ const Header: FC<headerProps> = () => {
         <button
           onClick={() => {
             signOut();
+            redirect("/sign-in");
           }}
           className="lg:hover:bg-gray-400 py-2 px-4 bg-gray-600 rounded-lg duration-150"
         >
