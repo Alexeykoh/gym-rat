@@ -15,7 +15,9 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="en">
-        <body className={"text-white bg-zinc-800"}>{children}</body>
+        <body className={"text-white bg-zinc-800 bgImage object-contain"}>
+          {children}
+        </body>
       </html>
     </AuthProvider>
   );
