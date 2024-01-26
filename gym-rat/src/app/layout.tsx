@@ -1,9 +1,6 @@
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GYM-Rat",
@@ -18,9 +15,7 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="en">
-        <body className={(inter.className, "text-white bg-zinc-800")}>
-          {children}
-        </body>
+        <body className={"text-white bg-zinc-800"}>{children}</body>
       </html>
     </AuthProvider>
   );
