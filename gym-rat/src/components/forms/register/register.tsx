@@ -1,6 +1,8 @@
 "use client";
 
 import { validatePassword } from "@/lib/helpers";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 
 type registrationProps = {};
@@ -11,6 +13,7 @@ interface iUserInfo {
 }
 
 const RegistrationForm: FC<registrationProps> = () => {
+  const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -83,11 +86,21 @@ const RegistrationForm: FC<registrationProps> = () => {
       const res = await fetch("/api/auth/user", {
         method: "POST",
         body: JSON.stringify(formData),
-      }).then((res: any) => {
+      }).then(async (res: any) => {
+        const { email, password } = formData;
         switch (res.status) {
           case 200:
             res.json();
-            setBusy(false);
+            //
+            // auto login
+            const sign = await signIn("credentials", {
+              email,
+              password,
+              redirect: false,
+            }).then(() => {
+              setBusy(false);
+              router.replace("/account");
+            });
             break;
           case 409:
             newErrors.registration = "User already exist";
