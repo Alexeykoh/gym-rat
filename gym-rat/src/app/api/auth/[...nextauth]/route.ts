@@ -4,7 +4,7 @@ import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 
-export const authOption: NextAuthOptions = {
+const authOption: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
