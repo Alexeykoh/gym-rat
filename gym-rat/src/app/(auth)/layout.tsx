@@ -7,7 +7,7 @@ type layoutProps = {
 export default async function AuthLayout({ children }: layoutProps) {
   //
   return (
-    <main className="w-screen h-screen flex flex-col items-center justify-center">
+    <main className="lg:w-screen lg:h-screen flex flex-col items-center justify-center">
       {children}
     </main>
   );
