@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
 type layoutProps = {
-  children: ReactNode;
+  children: ReactNode | string;
 };
 
 export default function PrivateLayout({ children }: layoutProps) {
@@ -18,7 +18,7 @@ export default function PrivateLayout({ children }: layoutProps) {
 
   return (
     <>
-      <main className="container mx-auto flex flex-col w-full">
+      <main className="container p-4 mx-auto flex flex-col w-full">
         <Header />
         {children}
       </main>
