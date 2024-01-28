@@ -1,5 +1,6 @@
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import type { Metadata } from "next";
+import { Providers } from "./GlobalRegux/provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <body className={"text-white bg-zinc-800"}>
-          {children}
+          <Providers>{children}</Providers>
         </body>
       </html>
     </AuthProvider>
