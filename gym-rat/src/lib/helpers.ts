@@ -17,3 +17,12 @@ export function validatePassword(password: string) {
     return false; // Password does not meet all criteria
   }
 }
+
+export function getCurrentDate() {
+  let date = new Date();
+  let year = date.getFullYear();
+  let month = (1 + date.getMonth()).toString().padStart(2, "0");
+  let day = date.getDate().toString().padStart(2, "0");
+  let formattedDate = `${year}-${month}-${day}`;
+  return formattedDate;
+}
