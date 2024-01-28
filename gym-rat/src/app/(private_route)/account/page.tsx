@@ -10,6 +10,7 @@ import logOutIcon from "../../../../public/icons/LogOut.svg";
 import privacyIcon from "../../../../public/icons/Privacy.svg";
 import mainIcon from "../../../../public/icons/gym-rat-icon.png";
 import userIcon from "../../../../public/icons/userInfo.svg";
+import Link from "next/link";
 //
 type pageProps = {};
 
@@ -18,6 +19,7 @@ const Account: FC<pageProps> = () => {
   const { data, status }: any = useSession();
   const name = data?.user?.name;
   const email = data?.user?.email;
+  const role = data?.user?.role;
   //
   return (
     <>
@@ -28,6 +30,7 @@ const Account: FC<pageProps> = () => {
           </div>
           <p className="text-3xl max-w-2/3">{name}</p>
           <p className="text-1xl max-w-2/3 text-gray-400">{email}</p>
+          {role === "admin" && <Link  className="py-2 px-4 text-black bg-lime-400 rounded-xl" href={"/admin"}>{role}</Link>}
         </div>
         <div className="w-full bg-gray-600 rounded-2xl p-4 flex flex-col gap-4 ">
           <div className="flex gap-2 items-center">
