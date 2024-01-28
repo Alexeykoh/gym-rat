@@ -64,6 +64,12 @@ const LoginForm: FC<loginProps> = () => {
         password,
         redirect: false,
       });
+      if (res?.error) {
+        newErrors.login = "Wrong email or password";
+        setErrors(newErrors);
+        setBusy(false);
+        return;
+      }
       //
       router.replace("/account");
     }
