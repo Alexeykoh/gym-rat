@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
 body {
   font-family: "Open Sans", sans-serif;
-}
-
-.bgImage {
-  background-image: url("../../public/bg_alt.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
 }
