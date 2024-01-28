@@ -1,5 +1,6 @@
 "use client";
 
+import ActionButton from "@/components/ui/ActionButton";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
@@ -7,6 +8,7 @@ import { FC, useState } from "react";
 type loginProps = {};
 
 const LoginForm: FC<loginProps> = () => {
+  //
   const [busy, setBusy] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -62,11 +64,7 @@ const LoginForm: FC<loginProps> = () => {
         password,
         redirect: false,
       });
-      // if (res?.error) {
-      //   newErrors.login = res?.error;
-      // }
-      // setErrors(newErrors);
-      console.log("easy auth");
+      //
       router.replace("/account");
     }
   };
@@ -101,15 +99,7 @@ const LoginForm: FC<loginProps> = () => {
         />
         <div className="error text-red-400">{errors.password}</div>
       </div>
-      <button
-        type="submit"
-        className={
-          (busy ? " bg-gray-400 " : " bg-lime-400 ") +
-          " p-3 mt-4 rounded-xl text-xl text-black"
-        }
-      >
-        Log in
-      </button>
+      <ActionButton text={"Log in"} busy={busy} />
       <div className="error text-red-400">{errors.login}</div>
     </form>
   );
