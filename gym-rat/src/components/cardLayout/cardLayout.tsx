@@ -4,7 +4,7 @@ type cardLayoutProps = { children?: string | JSX.Element | JSX.Element[] };
 
 const CardLayout: FC<cardLayoutProps> = ({ children }) => {
   return (
-    <div className="bg-gray-600/50 px-4 py-4 rounded-2xl flex justify-between gap-4 items-center w-fit">
+    <div className="bg-gray-600/50 px-4 py-4 rounded-2xl flex justify-between gap-4 items-center w-full max-w-96">
       {children}
     </div>
   );
