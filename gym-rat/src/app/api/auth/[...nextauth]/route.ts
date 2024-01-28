@@ -2,18 +2,17 @@ import connectMongoDB from "@/lib/mongodb";
 import UserModel from "@/models/userModel";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOption: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
   providers: [
-    Credentials({
+    CredentialsProvider({
       type: "credentials",
       credentials: {},
       authorize: async function (credentials, req) {
-        // throw new Error("Function not implemented.");
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -23,7 +22,8 @@ const authOption: NextAuthOptions = {
         const user = await UserModel.findOne({ email: email });
         if (!user) throw Error("email/password mismatch");
         const passwordMatch = await user.comparePassword(password);
-        if (!password) throw Error("email/password mismatch");
+        console.log("passwordMatch", passwordMatch);
+        if (!passwordMatch) throw Error("email/password mismatch");
         //
         return {
           name: user.name,
