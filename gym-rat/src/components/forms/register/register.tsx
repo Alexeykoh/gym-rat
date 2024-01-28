@@ -1,5 +1,6 @@
 "use client";
 
+import ActionButton from "@/components/ui/ActionButton";
 import { validatePassword } from "@/lib/helpers";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -192,15 +193,7 @@ const RegistrationForm: FC<registrationProps> = () => {
         />
         <div className="error text-red-400">{errors.repeatPassword}</div>
       </div>
-      <button
-        type="submit"
-        className={
-          (busy ? " bg-gray-400 " : " bg-lime-400 ") +
-          " p-3 mt-4 rounded-xl text-xl text-black"
-        }
-      >
-        Register
-      </button>
+      <ActionButton text={"Register"} busy={busy} />
       <div className="error text-red-400">{errors.registration}</div>
     </form>
   );
