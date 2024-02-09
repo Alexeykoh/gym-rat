@@ -22,7 +22,11 @@ const authOption: NextAuthOptions = {
         const user = await UserModel.findOne({ email: email });
         if (!user) throw Error("email/password mismatch");
         const passwordMatch = await user.comparePassword(password);
-        console.log("passwordMatch", passwordMatch);
+        console.log("passwordMatch", passwordMatch, [
+          user.name,
+          user.email,
+          password,
+        ]);
         if (!passwordMatch) throw Error("email/password mismatch");
         //
         return {

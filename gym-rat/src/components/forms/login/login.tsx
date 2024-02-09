@@ -71,7 +71,7 @@ const LoginForm: FC<loginProps> = () => {
         return;
       }
       //
-      router.replace("/account");
+      router.replace("/dashboard");
     }
   };
 

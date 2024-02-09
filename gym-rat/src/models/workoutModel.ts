@@ -11,7 +11,7 @@ export interface iWorkout {
 }
 const workoutSchema: Schema = new Schema({
   user_id: { type: String, required: true },
-  date: { type: String, default: Date.now },
+  date: { type: Date, default: Date.now },
   name: { type: String, required: false },
   description: { type: String, required: false },
 });

@@ -16,7 +16,7 @@ const Nav: FC<navProps> = () => {
   //
 
   return (
-    <nav className="flex w-full max-w-96 justify-between bg-gray-500 rounded-full text-lg">
+    <nav className="flex w-full max-w-96 justify-between   rounded-full text-lg">
       {routes.map((el: { name: string; path: string }, ind: number) => {
         return (
           <Link

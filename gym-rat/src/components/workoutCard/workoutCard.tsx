@@ -36,7 +36,9 @@ const WorkoutCard: FC<workoutCardProps> = ({
           </div>
         </div>
         <div className="flex justify-between">
-          <div className="text-gray-100/50">{date}</div>
+          <div className="text-gray-100/50 w-1/2">
+            {new Date(date).toLocaleDateString("ru-RU")}
+          </div>
           <svg
             className="bg-lime-500 rounded-full"
             fill="black"
