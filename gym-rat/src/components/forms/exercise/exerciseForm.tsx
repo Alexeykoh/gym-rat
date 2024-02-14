@@ -54,7 +54,7 @@ export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
         type_id: id,
       };
       //
-      const res = await fetch("/api/one_exercise", {
+      const res = await fetch("/api/exercises/items", {
         method: "POST",
         body: JSON.stringify(newFormData),
       })
