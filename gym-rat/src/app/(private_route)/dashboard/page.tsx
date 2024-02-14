@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import arm from "../../../../public/icons/arm.svg";
 
 export default function Dashboard() {
+  const { data, status }: any = useSession();
   const currentDate = useMemo(() => {
     return new Date();
   }, []);
@@ -22,7 +23,7 @@ export default function Dashboard() {
   const [latestWorkout, setLatestWorkout] = useState<iWorkout | null>(null);
   //
   function getLatestWorkout() {
-    fetch("/api/workout/latest")
+    fetch("/api/workouts/items?type=latest")
       .then((res) => res.json())
       .then((data) => {
         setLatestWorkout(data.message);
@@ -30,10 +31,11 @@ export default function Dashboard() {
   }
 
   //
-  const { data, status }: any = useSession();
+
   const name = data?.user?.name;
   const email = data?.user?.email;
   const role = data?.user?.role;
+
   //
 
   useEffect(() => {

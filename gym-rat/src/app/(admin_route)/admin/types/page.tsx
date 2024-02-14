@@ -14,7 +14,7 @@ export default function TypesPage() {
   //
   async function getTypes() {
     setLoading(true);
-    fetch("/api/exercise_type")
+    fetch("/api/exercises/types")
       .then((res) => res.json())
       .then((data) => {
         setTypes(data?.message);
@@ -23,7 +23,7 @@ export default function TypesPage() {
   }
 
   async function createType(formData: iExerciseType): Promise<Response> {
-    return await fetch("/api/exercise_type", {
+    return await fetch("/api/exercises/types", {
       method: "POST",
       body: JSON.stringify(formData),
     });
@@ -36,7 +36,7 @@ export default function TypesPage() {
         (prompt("Enter new description:", el.description) as string) ||
         el.description,
     };
-    const update = await fetch("/api/exercise_type?id=" + el._id, {
+    const update = await fetch("/api/exercises/types/" + el._id, {
       method: "PUT",
       body: JSON.stringify(data),
     })
@@ -52,7 +52,7 @@ export default function TypesPage() {
       return;
     }
     setLoading(true);
-    const remove = await fetch("/api/exercise_type?id=" + id, {
+    const remove = await fetch("/api/exercises/types/" + id, {
       method: "DELETE",
       body: JSON.stringify("formData"),
     })

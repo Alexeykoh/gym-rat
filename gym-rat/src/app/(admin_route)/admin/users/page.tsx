@@ -12,7 +12,7 @@ export default function Page() {
   //
   async function getUsers() {
     setLoading(true);
-    fetch("/api/user")
+    fetch("/api/users")
       .then((res) => res.json())
       .then((data) => {
         setUsers(data?.users);

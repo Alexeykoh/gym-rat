@@ -16,7 +16,7 @@ export default function ExercisesPage() {
   //
   async function getTypes() {
     setLoading(true);
-    fetch("/api/exercise_type")
+    fetch("/api/exercises/types")
       .then((res) => res.json())
       .then((data) => {
         setTypes(data?.message);
@@ -25,7 +25,7 @@ export default function ExercisesPage() {
   }
   async function getExercise() {
     setLoading(true);
-    fetch("/api/one_exercise")
+    fetch("/api/exercises/items")
       .then((res) => res.json())
       .then((data) => {
         setExercise(data?.message);
@@ -39,7 +39,7 @@ export default function ExercisesPage() {
       return;
     }
     setLoading(true);
-    const remove = await fetch("/api/one_exercise?id=" + id, {
+    const remove = await fetch("/api/exercises/items/" + id, {
       method: "DELETE",
       body: JSON.stringify("formData"),
     })
@@ -57,7 +57,7 @@ export default function ExercisesPage() {
         el.description,
       type_id: el.type_id,
     };
-    const update = await fetch("/api/one_exercise?id=" + el._id, {
+    const update = await fetch("/api/exercises/items/" + el._id, {
       method: "PUT",
       body: JSON.stringify(data),
     })

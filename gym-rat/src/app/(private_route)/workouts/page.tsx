@@ -2,6 +2,7 @@
 import CardLayout from "@/components/cardLayout/cardLayout";
 
 import WorkoutForm from "@/components/forms/workout/WorkoutForm";
+import ActionButton from "@/components/ui/ActionButton";
 import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
 import WorkoutCard from "@/components/workoutCard/workoutCard";
@@ -21,18 +22,9 @@ const Workout: FC<pageProps> = () => {
   const [next, setNext] = useState<iWorkout[]>([]);
   const [isLoading, setLoading] = useState(true);
 
-  function getWorkouts() {
-    setLoading(true);
-    fetch("/api/workout/all")
-      .then((res) => res.json())
-      .then((data) => {
-        setWorkouts(data?.message);
-        setLoading(false);
-      });
-  }
   function getLatest() {
     setLoading(true);
-    fetch("/api/workout/latest")
+    fetch("/api/workouts/items?type=today")
       .then((res) => res.json())
       .then((data) => {
         setLatest(data?.message);
@@ -41,7 +33,7 @@ const Workout: FC<pageProps> = () => {
   }
   function getNext() {
     setLoading(true);
-    fetch("/api/workout/next")
+    fetch("/api/workouts/items?type=nextOne")
       .then((res) => res.json())
       .then((data) => {
         setNext(data?.message);
@@ -50,7 +42,7 @@ const Workout: FC<pageProps> = () => {
   }
   function getPrevious() {
     setLoading(true);
-    fetch("/api/workout/previous")
+    fetch("/api/workouts/items?type=previous")
       .then((res) => res.json())
       .then((data) => {
         setWorkouts(data?.message);
@@ -59,7 +51,6 @@ const Workout: FC<pageProps> = () => {
   }
 
   useEffect(() => {
-    getWorkouts();
     getLatest();
     getNext();
     getPrevious();
@@ -81,14 +72,15 @@ const Workout: FC<pageProps> = () => {
           />
         </Modal>
       ) : null}
-      <button
-        onClick={() => {
-          setOpenModal(true);
-        }}
-        className="px-4 py-2 fixed bottom-4 left-1/2 -translate-x-1/2 bg-lime-500 rounded-2xl z-20 text-black shadow-lg"
-      >
-        add workout
-      </button>
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2">
+        {" "}
+        <ActionButton
+          text="Add workout"
+          action={() => {
+            setOpenModal(true);
+          }}
+        />
+      </div>
       <Search />
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {isLoading ? (
@@ -97,52 +89,58 @@ const Workout: FC<pageProps> = () => {
           </>
         ) : (
           <>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-4xl font-semibold">Today</h2>
-              {!latest ? null : (
-                <CardLayout>
-                  <WorkoutCard
-                    icon={arm}
-                    title={latest.name}
-                    description={latest.description}
-                    date={latest.date}
-                    id={latest._id as string}
-                  />
-                </CardLayout>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-4xl font-semibold">Next</h2>
-              {next.map(({ date, description, name, _id }, ind) => {
-                return (
-                  <CardLayout key={ind}>
+            {!latest ? null : (
+              <div className="flex flex-col gap-2">
+                <h2 className="text-4xl font-semibold">Today</h2>
+                {!latest ? null : (
+                  <CardLayout>
                     <WorkoutCard
                       icon={arm}
-                      title={name}
-                      description={description}
-                      date={date}
-                      id={_id as string}
+                      title={latest.name}
+                      description={latest.description}
+                      date={latest.date}
+                      id={latest._id as string}
                     />
                   </CardLayout>
-                );
-              })}
-            </div>
-            <div className="flex flex-col gap-2">
-              <h2 className="text-4xl font-semibold">Previous</h2>
-              {workouts.map(({ date, description, name, _id }, ind) => {
-                return (
-                  <CardLayout key={ind}>
-                    <WorkoutCard
-                      icon={arm}
-                      title={name}
-                      description={description}
-                      date={date}
-                      id={_id as string}
-                    />
-                  </CardLayout>
-                );
-              })}
-            </div>
+                )}
+              </div>
+            )}
+            {!next ? null : (
+              <div className="flex flex-col gap-2">
+                <h2 className="text-4xl font-semibold">Next</h2>
+                {next.map(({ date, description, name, _id }, ind) => {
+                  return (
+                    <CardLayout key={ind}>
+                      <WorkoutCard
+                        icon={arm}
+                        title={name}
+                        description={description}
+                        date={date}
+                        id={_id as string}
+                      />
+                    </CardLayout>
+                  );
+                })}
+              </div>
+            )}
+            {!workouts ? null : (
+              <div className="flex flex-col gap-2">
+                <h2 className="text-4xl font-semibold">Previous</h2>
+                {workouts?.map(({ date, description, name, _id }, ind) => {
+                  return (
+                    <CardLayout key={ind}>
+                      <WorkoutCard
+                        icon={arm}
+                        title={name}
+                        description={description}
+                        date={date}
+                        id={_id as string}
+                      />
+                    </CardLayout>
+                  );
+                })}
+              </div>
+            )}
           </>
         )}
       </div>
