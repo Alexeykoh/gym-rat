@@ -1,6 +1,7 @@
 "use client";
 
 import ActionButton from "@/components/ui/ActionButton";
+import { LogIn } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
@@ -80,7 +81,10 @@ const LoginForm: FC<loginProps> = () => {
       onSubmit={handleSubmit}
       className="max-w-96 w-full flex flex-col gap-8 p-4"
     >
-      <h1 className="text-4xl font-bold">Log in</h1>
+      <h1 className="text-4xl font-bold flex gap-4 items-center">
+        <LogIn size={32} />
+        Log in
+      </h1>
       <div className="flex flex-col w-full">
         <label className="p-2">Email</label>
         <input
