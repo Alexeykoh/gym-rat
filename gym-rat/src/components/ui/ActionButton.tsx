@@ -27,7 +27,7 @@ const ActionButton: FC<ActionButtonProps> = ({ busy, action, text, type }) => {
         }
       >
         {!busy ? (
-          text
+          <p className="text-2xl font-semibold">{text}</p>
         ) : (
           <div className="f-fit flex gap-1 items-center ">
             <svg

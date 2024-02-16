@@ -5,6 +5,8 @@ import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
 import { iExercise } from "@/models/exerciseModel";
 import { iExerciseType } from "@/models/exerciseTypeModel";
+import axios from "axios";
+import { FilePenLine, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ExercisesPage() {
@@ -39,12 +41,11 @@ export default function ExercisesPage() {
       return;
     }
     setLoading(true);
-    const remove = await fetch("/api/exercises/items/" + id, {
-      method: "DELETE",
-      body: JSON.stringify("formData"),
-    })
-      .then((data: any) => data.json())
-      .then((res) => {
+    axios
+      .delete("/api/exercises/items/" + id, {
+        data: JSON.stringify("formData"),
+      })
+      .then(({ data }) => {
         getExercise();
         setLoading(false);
       });
@@ -135,17 +136,17 @@ export default function ExercisesPage() {
                 <ContextMenu
                   data={[
                     {
-                      name: "delete",
-                      icon: "➖",
+                      name: "Изменить",
+                      icon: <FilePenLine />,
                       action: () => {
-                        removeExercise(item._id);
+                        updateExercise(item);
                       },
                     },
                     {
-                      name: "edit",
-                      icon: "✏️",
+                      name: "Удалить",
+                      icon: <Trash2 />,
                       action: () => {
-                        updateExercise(item);
+                        removeExercise(item._id);
                       },
                     },
                   ]}

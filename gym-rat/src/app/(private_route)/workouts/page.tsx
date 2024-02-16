@@ -7,6 +7,7 @@ import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
 import WorkoutCard from "@/components/workoutCard/workoutCard";
 import { iWorkout } from "@/models/workoutModel";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import arm from "../../../../public/icons/arm.svg";
@@ -20,6 +21,7 @@ const Workout: FC<pageProps> = () => {
   const [workouts, setWorkouts] = useState<iWorkout[]>([]);
   const [latest, setLatest] = useState<iWorkout | null>(null);
   const [next, setNext] = useState<iWorkout[]>([]);
+  const [allWorkouts, setAllWorkouts] = useState<iWorkout[]>([]);
   const [isLoading, setLoading] = useState(true);
 
   function getLatest() {
@@ -48,6 +50,11 @@ const Workout: FC<pageProps> = () => {
         setWorkouts(data?.message);
         setLoading(false);
       });
+  }
+  function getWorkouts() {
+    axios.get("/api/workouts/items").then(({ data }) => {
+      setAllWorkouts(data?.message);
+    });
   }
 
   useEffect(() => {

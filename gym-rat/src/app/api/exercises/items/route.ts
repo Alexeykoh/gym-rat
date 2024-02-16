@@ -1,12 +1,31 @@
 import connectMongoDB from "@/lib/mongodb";
 import ExerciseModel, { iExercise } from "@/models/exerciseModel";
+import UserModel from "@/models/userModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+
+const switchType: any = {
+  all: async () => {
+    console.log("switchType all");
+    return await ExerciseModel.find({});
+  },
+  type_id: async (id: string) => {
+    console.log("switchType type_id");
+    return await ExerciseModel.find({ type_id: id });
+  },
+};
 
 export async function GET(req: any, res: any) {
   // get all exercises
   //
   const session: any = await getServerSession(req);
+  const userData = await UserModel.findOne({
+    email: session?.user?.email,
+  });
+  //
+  const typeIdParam = req.nextUrl.searchParams.get("type_id");
+  //
+  //
   // Check if the user is authenticated
   if (!session) {
     return NextResponse.json(
@@ -17,8 +36,16 @@ export async function GET(req: any, res: any) {
   //
   await connectMongoDB();
   //
-  const allExercise = await ExerciseModel.find({});
-  return NextResponse.json({ message: allExercise }, { status: 200 });
+  if (typeIdParam !== null) {
+    const resultParams = await switchType["type_id"](typeIdParam);
+    return NextResponse.json({ message: resultParams }, { status: 200 });
+  } else {
+    console.log("get all", typeIdParam !== null);
+    const result = await ExerciseModel.find({});
+    return NextResponse.json({ message: result }, { status: 200 });
+  }
+
+  //
 }
 
 export async function POST(req: any) {

@@ -5,6 +5,7 @@ import ContextMenu from "@/components/ui/ContextMenu";
 import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
 import { iExerciseType } from "@/models/exerciseTypeModel";
+import { FilePenLine, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function TypesPage() {
@@ -116,17 +117,17 @@ export default function TypesPage() {
                 <ContextMenu
                   data={[
                     {
-                      name: "delete",
-                      icon: "➖",
+                      name: "Изменить",
+                      icon: <FilePenLine />,
                       action: () => {
-                        removeType(el._id);
+                        updateType(el);
                       },
                     },
                     {
-                      name: "edit",
-                      icon: "✏️",
+                      name: "Удалить",
+                      icon: <Trash2 />,
                       action: () => {
-                        updateType(el);
+                        removeType(el._id);
                       },
                     },
                   ]}

@@ -2,7 +2,11 @@
 import { FC, useEffect, useRef, useState } from "react";
 
 type ContextMenuProps = {
-  data: { name: string; icon: any | string; action: () => void }[];
+  data: {
+    name: string;
+    icon: any | string | JSX.IntrinsicElements;
+    action: () => void;
+  }[];
 };
 
 const ContextMenu: FC<ContextMenuProps> = ({ data }) => {
@@ -40,7 +44,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ data }) => {
           ref={menuRef}
           className={
             (context ? " flex " : " hidden ") +
-            " flex-col absolute top-0 right-0  rounded-xl bg-gray-600 shadow-md w-44 z-40 overflow-hidden"
+            " flex-col absolute top-0 right-0  rounded-xl shadow-md w-max z-40 overflow-hidden px-2 bg-gray-400"
           }
         >
           {!data
@@ -53,10 +57,10 @@ const ContextMenu: FC<ContextMenuProps> = ({ data }) => {
                       el.action();
                       setContext(false);
                     }}
-                    className="hover:bg-gray-300 hover:text-black flex gap-2 items-center justify-start w-full p-2 bg-gray-400 "
+                    className="hover:bg-gray-300 hover:text-black flex gap-2 items-center justify-start w-full p-2  "
                   >
                     {el.icon}
-                    <p>{el.name}</p>
+                    <p className="text-xl">{el.name}</p>
                   </li>
                 );
               })}
