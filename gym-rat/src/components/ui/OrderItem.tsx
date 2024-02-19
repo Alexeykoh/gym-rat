@@ -1,7 +1,7 @@
 "use client";
 import { iMeasureEnum, iOrder } from "@/lib/types";
 import axios from "axios";
-import { Loader, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import ContextMenu from "./ContextMenu";
 
@@ -68,18 +68,11 @@ const OrderItem: FC<OrderItemProps> = ({
       <li
         className={
           (isVisible ? " opacity-100 " : " opacity-0 ") +
-          " flex flex-row justify-between items-center p-4 bg-zinc-800 rounded-lg relative duration-500 "
+          (loading ? " bg-lime-400/50 " : " bg-zinc-800 ") +
+          " flex flex-row justify-between items-center p-4  rounded-2xl relative duration-500 "
         }
       >
-        {!loading ? null : (
-          <div className="absolute -right-2 -bottom-2 animate-spin">
-            <Loader />
-          </div>
-        )}
-
-        {/* <p className="text-xs">{_id}</p> */}
-        <p>{order}</p>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 text-xl">
           <input
             type="number"
             onChange={(e) => changeInput(e.target.value)}
@@ -87,7 +80,7 @@ const OrderItem: FC<OrderItemProps> = ({
               changeOrderItem(orderData);
             }}
             value={orderData?.amount}
-            className="text-black border-2 w-16 border-gray-300 rounded-md p-2 text-center"
+            className="text-black  w-16 border-gray-300 rounded-md p-2 text-center"
           />
           <select
             defaultValue={iMeasureEnum.kg}

@@ -3,9 +3,11 @@
 import { iMeasureEnum, iOrder } from "@/lib/types";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
 import axios from "axios";
-import { Plus, Trash2 } from "lucide-react";
+import { Grab, Hand, Plus, Trash2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import CardLayout from "../cardLayout/cardLayout";
+import Badge, { BadgeType } from "./Badge";
 import ContextMenu from "./ContextMenu";
 import OrderItem from "./OrderItem";
 
@@ -13,13 +15,16 @@ type WorkoutExerciseProps = {
   isSelected: boolean;
   exercise: iWorkoutExercises;
   removeExercise: () => void;
+  dragProps: any;
 };
 
 const WorkoutExercise: FC<WorkoutExerciseProps> = ({
   isSelected,
   exercise,
   removeExercise,
+  dragProps,
 }) => {
+  const { data: session, status }: any = useSession();
   const [orderItems, setOrderItems] = useState<iOrder[]>([]);
   //
   function getOrderItems(id: string) {
@@ -65,12 +70,16 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
     <>
       <CardLayout isSelected={isSelected}>
         <div className="flex flex-col w-full gap-4">
-          <p className="text-xs">{exercise._id}</p>
+          <div {...dragProps} className={(isSelected && " text-white ")+" p-3 bg-zinc-900 rounded-full"}>
+            {isSelected ? <Grab /> : <Hand />}
+          </div>
+          {session?.user?.role === "admin" && (
+            <Badge value={exercise._id} type={BadgeType.Info} />
+          )}
           <div className="flex items-center justify-between w-full">
             <p className="text-3xl w-3/4">
               <span className="">#{exercise.order + 1}</span> {exercise.name}
             </p>
-
             <ContextMenu
               data={[
                 {

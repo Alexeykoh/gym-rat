@@ -1,6 +1,7 @@
 "use client";
 import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
+import PreLoader from "@/components/ui/PreLoader";
 import { iExercise } from "@/models/exerciseModel";
 import { iExerciseType } from "@/models/exerciseTypeModel";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
@@ -84,7 +85,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
 
             <div className="flex w-full flex-col gap-4">
               {!types.length
-                ? null
+                ? <PreLoader/>
                 : types.map((el, ind) => {
                     return (
                       <div
@@ -157,18 +158,14 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
             </div>
             <div className="flex w-full flex-col gap-4">
               <div className="flex gap-2">
-                <p>{"Название"}</p>
+                <p>{"Название: "}</p>
                 <p>{formData?.name}</p>
-              </div>
-              <div className="flex gap-2">
-                <p>{"По порядку"}</p>
-                <p>{(formData?.order || 0) + 1}</p>
               </div>
             </div>
             <ActionButton
               busy={false}
               action={createNewExercise}
-              text={"add exercise"}
+              text={"Добавить упражнение"}
             />
           </section>
         </div>

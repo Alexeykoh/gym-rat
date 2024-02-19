@@ -3,6 +3,7 @@
 import ActionButton from "@/components/ui/ActionButton";
 import BackButton from "@/components/ui/BackButton";
 import ContextMenu from "@/components/ui/ContextMenu";
+import PreLoader from "@/components/ui/PreLoader";
 import WorkoutExercise from "@/components/ui/WorkoutExercise";
 import { iMeasureEnum, iOrder } from "@/lib/types";
 import { iExerciseType } from "@/models/exerciseTypeModel";
@@ -141,6 +142,9 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   }, []);
 
   //
+  if (!workout && !types.length && !exercises.length) {
+    return <PreLoader />;
+  }
   return (
     <div className="flex flex-col gap-4 w-full pb-64">
       <div className="fixed bottom-8 left-8 z-40">
@@ -186,6 +190,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
         />
       </div>
       <p className="text-md text-gray-400">{workout?.description}</p>
+      {!exercises && <PreLoader />}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="characters" type="column" direction="vertical">
           {(provided) => (
@@ -210,9 +215,9 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
                         className={"dnd_item"}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
                       >
                         <WorkoutExercise
+                          dragProps={{ ...provided.dragHandleProps }}
                           isSelected={snapshot.isDragging}
                           exercise={el}
                           removeExercise={() => {

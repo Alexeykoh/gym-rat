@@ -1,14 +1,15 @@
 "use client";
 
 import ActionButton from "@/components/ui/ActionButton";
+import Badge, { BadgeType } from "@/components/ui/Badge";
 import { iExercise } from "@/models/exerciseModel";
 import { useState } from "react";
 import { iErrors, pageProps } from "./types";
 
-export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
+export default function ExerciseForm({ typeID, onSuccess, name }: pageProps) {
   const [busy, setBusy] = useState(false);
   const initialFormData: iExercise = {
-    type_id: typeList[0]?.name,
+    type_id: typeID,
     name: "",
     description: "",
   };
@@ -44,19 +45,10 @@ export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
       setErrors(newErrors);
       setBusy(false);
     } else {
-      const id = typeList.filter((el) => {
-        console.log(el.name, formData.type_id);
-        return el.name === formData.type_id;
-      })[0]?._id;
-      //
-      const newFormData = {
-        ...formData,
-        type_id: id,
-      };
       //
       const res = await fetch("/api/exercises/items", {
         method: "POST",
-        body: JSON.stringify(newFormData),
+        body: JSON.stringify(formData),
       })
         .then((data: any) => {
           switch (data.status) {
@@ -70,16 +62,14 @@ export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
           return data.json();
         })
         .then((el) => {
-          console.log(el);
           setFormData(initialFormData);
           setErrors(newErrors);
           onSuccess();
+          setBusy(false);
         })
         .catch((err) => {
           newErrors.name = err.message;
           setErrors(newErrors);
-        })
-        .finally(() => {
           setBusy(false);
         });
     }
@@ -94,29 +84,11 @@ export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
 
   return (
     <form action={handleSubmit} className="flex flex-col gap-4">
+      <h1 className="text-4xl">{name}</h1>
+      <Badge value={typeID} type={BadgeType.Info} />
       <div className="flex flex-col w-full">
         <label className="p-2">
-          Type <span className="text-red-400">*</span>
-        </label>
-        <select
-          defaultValue=""
-          name="type_id"
-          onChange={handleChange}
-          className="text-black px-4 py-2 rounded-lg"
-          value={formData.type_id}
-        >
-          {!typeList
-            ? null
-            : typeList.map((el, ind) => {
-                return <option key={ind}>{el.name}</option>;
-              })}
-        </select>
-        <div className="error text-red-400">{errors.type_id}</div>
-      </div>
-
-      <div className="flex flex-col w-full">
-        <label className="p-2">
-          Name <span className="text-red-400">*</span>
+          Название <span className="text-red-400">*</span>
         </label>
         <input
           onChange={handleChange}
@@ -128,7 +100,7 @@ export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
         <div className="error text-red-400">{errors.name}</div>
       </div>
       <div className="flex flex-col w-full">
-        <label className="p-2">Description</label>
+        <label className="p-2">Описание</label>
         <input
           onChange={handleChange}
           name="description"
@@ -139,7 +111,7 @@ export default function ExerciseForm({ typeList, onSuccess }: pageProps) {
         <div className="error text-red-400">{errors.description}</div>
       </div>
       <div className="error text-red-400">{errors.exist}</div>
-      <ActionButton text="Create exercise" busy={busy} />
+      <ActionButton text="Создать упражнение" busy={busy} />
     </form>
   );
 }

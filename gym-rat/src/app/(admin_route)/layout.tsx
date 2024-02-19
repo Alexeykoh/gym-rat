@@ -17,10 +17,9 @@ export default function AdminLayout({ children }: layoutProps) {
   }
   if (status !== "loading") {
     const pages = [
-      { name: "Back", href: "/account" },
-      { name: "Types", href: "/admin/types" },
-      { name: "Exercises", href: "/admin/exercises" },
-      { name: "Users", href: "/admin/users" },
+      { name: "Аккаунт", href: "/account" },
+      { name: "Категории", href: "/admin/types" },
+      { name: "Пользователи", href: "/admin/users" },
     ];
     return (
       <main className="container p-4 mx-auto flex flex-col w-full gap-10">
@@ -34,8 +33,9 @@ export default function AdminLayout({ children }: layoutProps) {
                     key={ind}
                     href={el.href}
                     className={
-                      (pathname === el.href ? " bg-lime-400 text-black " : "") +
-                      " px-4 py-2  rounded-full active:bg-gray-100/50"
+                      (pathname.includes(el.href)
+                        ? " bg-lime-400 text-black "
+                        : "") + " px-4 py-2  rounded-full active:bg-gray-100/50"
                     }
                   >
                     {el.name}

@@ -1,9 +1,9 @@
 import { iExercise } from "@/models/exerciseModel";
-import { iExerciseType } from "@/models/exerciseTypeModel";
 
 export type pageProps = {
-  typeList: iExerciseType[];
+  typeID: string;
   onSuccess: () => any;
+  name: string;
 };
 
 export interface iErrors extends iExercise {

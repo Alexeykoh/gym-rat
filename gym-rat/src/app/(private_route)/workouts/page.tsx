@@ -3,12 +3,13 @@ import CardLayout from "@/components/cardLayout/cardLayout";
 
 import WorkoutForm from "@/components/forms/workout/WorkoutForm";
 import ActionButton from "@/components/ui/ActionButton";
+import PreLoader from "@/components/ui/PreLoader";
 import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
 import WorkoutCard from "@/components/workoutCard/workoutCard";
 import { iWorkout } from "@/models/workoutModel";
 import axios from "axios";
-import { Loader, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import arm from "../../../../public/icons/arm.svg";
@@ -98,13 +99,7 @@ const Workout: FC<pageProps> = () => {
       <Search />
       <div className={"grid grid-cols-1 lg:grid-cols-4 gap-8"}>
         {isLoading ? (
-          <>
-            <div className="w-full flex items-center justify-center pt-64">
-              <span className="animate-spin">
-                <Loader size={64} />
-              </span>
-            </div>
-          </>
+          <PreLoader />
         ) : (
           <>
             {!latest ? null : (

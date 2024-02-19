@@ -58,11 +58,11 @@ export default function ExerciseTypeForm({
     <form action={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col w-full">
         <label className="p-2">
-          Name <span className="text-red-400">*</span>
+          Название <span className="text-red-400">*</span>
         </label>
         <input
           onChange={handleChange}
-          placeholder="example: chest / legs ..."
+          placeholder="пример: Грудь / Ноги ..."
           name="name"
           className="text-black px-4 py-2 rounded-lg"
           type="text"
@@ -71,18 +71,18 @@ export default function ExerciseTypeForm({
       </div>
 
       <div className="flex flex-col w-full">
-        <label className="p-2">Description</label>
+        <label className="p-2">Описание</label>
         <input
           onChange={handleChange}
           name="description"
-          placeholder="description, if needed"
+          placeholder="описание, если требуется..."
           className="text-black px-4 py-2 rounded-lg"
           type="text"
           value={formData.description}
         />
       </div>
       {error && <p className="text-red-200">{error}</p>}
-      <ActionButton text="Create type" busy={busy} />
+      <ActionButton text="Создать категорию" busy={busy} />
     </form>
   );
 }

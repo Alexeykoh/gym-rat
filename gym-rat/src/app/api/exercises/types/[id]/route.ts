@@ -1,4 +1,5 @@
 import connectMongoDB from "@/lib/mongodb";
+import ExerciseModel from "@/models/exerciseModel";
 import ExerciseTypeModel, { iExerciseType } from "@/models/exerciseTypeModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -65,6 +66,7 @@ export async function DELETE(req: any, { params }: any) {
     }
     //
     await connectMongoDB();
+    const deleteBounce = await ExerciseModel.deleteMany({ type_id: params.id });
     await ExerciseTypeModel.findByIdAndDelete(params.id);
     return NextResponse.json(
       { message: "Exercise was delete" },

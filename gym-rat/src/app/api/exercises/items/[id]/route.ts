@@ -2,7 +2,6 @@ import connectMongoDB from "@/lib/mongodb";
 import ExerciseModel, { iExercise } from "@/models/exerciseModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import result from "postcss/lib/result";
 
 export async function GET(req: any, { params }: any) {
   // get one exercise by ID
@@ -18,7 +17,7 @@ export async function GET(req: any, { params }: any) {
   //
   await connectMongoDB();
   //
-  const result = await ExerciseModel.findOne({ _id: params.id });
+  const result = await ExerciseModel.find({ type_id: params.id });
   return NextResponse.json({ message: result }, { status: 200 });
 }
 
@@ -68,7 +67,7 @@ export async function DELETE(req: any, { params }: any) {
     );
   }
   //
-  await connectMongoDB();
+  await connectMongoDB(); 
   await ExerciseModel.findByIdAndDelete(params.id);
   return NextResponse.json({ message: "Exercise was delete" }, { status: 200 });
 }
