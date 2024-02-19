@@ -1,5 +1,4 @@
 "use client";
-import ExerciseForm from "@/components/forms/exercise/exerciseForm";
 import ContextMenu from "@/components/ui/ContextMenu";
 import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
@@ -96,13 +95,13 @@ export default function ExercisesPage() {
         >
           <h2 className="text-2xl font-semibold">New exercise</h2>
           <br />
-          <ExerciseForm
-            typeList={types}
+          {/* <ExerciseForm
+            typeID={types}
             onSuccess={function () {
               setModal(false);
               getExercise();
             }}
-          />
+          /> */}
         </Modal>
       )}
       <ul className="flex flex-col gap-6 w-full">
