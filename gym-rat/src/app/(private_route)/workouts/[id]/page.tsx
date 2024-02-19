@@ -1,13 +1,15 @@
 "use client";
 
-import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
+import BackButton from "@/components/ui/BackButton";
 import ContextMenu from "@/components/ui/ContextMenu";
+import WorkoutExercise from "@/components/ui/WorkoutExercise";
+import { iMeasureEnum, iOrder } from "@/lib/types";
 import { iExerciseType } from "@/models/exerciseTypeModel";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
 import { iWorkout } from "@/models/workoutModel";
 import axios from "axios";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Settings, SquarePen, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { FC, useEffect, useState } from "react";
@@ -23,8 +25,9 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   const [workout, setWorkout] = useState<iWorkout | null>(null);
   const [types, setTypes] = useState<iExerciseType[]>([]);
   const [exercises, setExercises] = useState<iWorkoutExercises[]>([]);
-
+  //
   const router = useRouter();
+  const currentDate = new Date().toISOString();
   //
   async function getTypes() {
     fetch("/api/exercises/types")
@@ -45,6 +48,34 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
           return a.order - b.order;
         })
       );
+    });
+  }
+  async function editWorkout(el: iWorkout) {
+    const data: iWorkout = {
+      name: (prompt("Enter new name:", el.name) as string) || el.name,
+      description:
+        (prompt("Enter new description:", el.description) as string) ||
+        el.description,
+      user_id: "",
+      date: currentDate,
+    };
+    const update = await fetch("/api/exercises/items/" + el._id, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    })
+      .then((data: any) => data.json())
+      .then((res) => {
+        // getExercise();
+        // setLoading(false);
+      });
+  }
+  function removeWorkout(id: string) {
+    const answer = window.confirm("are you sure?");
+    if (!answer) {
+      return;
+    }
+    axios.delete("/api/workouts/items/" + id).then(({ data }) => {
+      router.push(`/workouts`);
     });
   }
   function removeExercise(id: any) {
@@ -84,9 +115,23 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
     }
     return {
       ...style,
-      // cannot be 0, but make it super tiny
-      transitionDuration: `0.001s`,
+      transitionDuration: `1.500s`,
     };
+  }
+  //
+  function createNewOrder(id: string) {
+    const orderData: iOrder = {
+      exercise_id: id,
+      amount: 0,
+      order: 0,
+      measure: iMeasureEnum.kg,
+    };
+    console.log("api/workouts/exercises/" + id + "/order");
+    axios
+      .post("/api/workouts/exercises/order/" + id, { ...orderData })
+      .then((data) => {
+        console.log("data", data);
+      });
   }
   //
   useEffect(() => {
@@ -97,27 +142,55 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
 
   //
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2">
-        {" "}
-        <ActionButton
-          text="Добавить упражнение"
+    <div className="flex flex-col gap-4 w-full pb-64">
+      <div className="fixed bottom-8 left-8 z-40">
+        <BackButton
           action={() => {
-            router.push(`/exercise/${params.id}`);
+            router.push(`/workouts`);
           }}
         />
       </div>
-      <h1 className="text-7xl">{workout?.name}</h1>
-      <p className="text-xs text-gray-400">
-        {new Date(workout?.date as string).toLocaleDateString("ru-RU")}
-      </p>
+      <div className="fixed bottom-8 right-8 z-40">
+        <ActionButton
+          text={<Plus />}
+          action={() => {
+            router.push(`/workouts/exercise/${params.id}`);
+          }}
+        />
+      </div>
+      <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-5xl w-3/4">{workout?.name}</h1>
+          <p className="text-md text-gray-500">
+            {new Date(workout?.date as string).toLocaleDateString("ru-RU")}
+          </p>
+        </div>
+        <ContextMenu
+          icon={<Settings />}
+          data={[
+            {
+              name: "Переименовать",
+              icon: <SquarePen />,
+              action: () => {
+                // updateType(el);
+              },
+            },
+            {
+              name: "Удалить",
+              icon: <Trash2 />,
+              action: () => {
+                removeWorkout(params.id);
+              },
+            },
+          ]}
+        />
+      </div>
       <p className="text-md text-gray-400">{workout?.description}</p>
-
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="characters" type="column" direction="vertical">
-          {(provided, snapshot) => (
+          {(provided) => (
             <ul
-              className=""
+              className="dnd_list"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -130,54 +203,22 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
                   >
                     {(provided, snapshot) => (
                       <li
-                        className={
-                          (snapshot.draggingOver ? " p-2 " : "") +
-                          " duration-150 mb-4 "
-                        }
                         style={getStyle(
                           provided.draggableProps.style,
                           snapshot
                         )}
+                        className={"dnd_item"}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <CardLayout key={index}>
-                          <div className="flex flex-col w-full gap-4">
-                            <div className="flex items-center justify-between w-full">
-                              <p className="text-3xl w-3/4">
-                                <span className="">#{el.order + 1}</span>{" "}
-                                {el.name}
-                              </p>
-                              <ContextMenu
-                                data={[
-                                  {
-                                    name: "Подход",
-                                    icon: <Plus />,
-                                    action: () => {
-                                      // updateType(el);
-                                    },
-                                  },
-                                  {
-                                    name: "Удалить",
-                                    icon: <Trash2 />,
-                                    action: () => {
-                                      removeExercise(el._id);
-                                    },
-                                  },
-                                ]}
-                              />
-                            </div>
-                            <div className="w-full">
-                              <ul>
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                              </ul>
-                            </div>
-                          </div>
-                        </CardLayout>
+                        <WorkoutExercise
+                          isSelected={snapshot.isDragging}
+                          exercise={el}
+                          removeExercise={() => {
+                            removeExercise(el._id);
+                          }}
+                        />
                       </li>
                     )}
                   </Draggable>

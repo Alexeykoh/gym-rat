@@ -1,5 +1,6 @@
 import connectMongoDB from "@/lib/mongodb";
 import { iExerciseType } from "@/models/exerciseTypeModel";
+import OrderModel from "@/models/orderModel";
 import WorkoutExercisesModel, {
   iWorkoutExercises,
 } from "@/models/workoutExercisesModel";
@@ -78,6 +79,17 @@ export async function DELETE(req: any, { params }: any) {
     }
     //
     await connectMongoDB();
+    const { exercise_id } = await WorkoutExercisesModel.findOne({
+      _id: params.id,
+    });
+    await OrderModel.deleteMany(
+      { exercise_id: exercise_id },
+      function (err: any) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
     await WorkoutExercisesModel.findByIdAndDelete(params.id);
     return NextResponse.json(
       { message: "Exercise was delete" },

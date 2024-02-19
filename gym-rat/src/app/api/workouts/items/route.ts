@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 const getSwitch: any = {
   all: async () => {
-    // return await WorkoutModel.find({});
+    return await WorkoutModel.find({});
   },
   latest: async (id: string) => {
     const today = new Date(Date.now());

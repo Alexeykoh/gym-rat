@@ -5,7 +5,7 @@ import { FC } from "react";
 type ActionButtonProps = {
   busy?: boolean;
   action?: any;
-  text?: string;
+  text?: any;
   type?: "submit" | "reset" | "button" | undefined;
 };
 

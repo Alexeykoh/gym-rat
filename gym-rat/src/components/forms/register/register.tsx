@@ -85,7 +85,7 @@ const RegistrationForm: FC<registrationProps> = () => {
     } else {
       // Form is valid, submit data to server
       setBusy(true);
-      const res = await fetch("/api/auth/user", {
+      const res = await fetch("/api/auth", {
         method: "POST",
         body: JSON.stringify(formData),
       }).then(async (res: any) => {

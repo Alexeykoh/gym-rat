@@ -1,5 +1,4 @@
 import connectMongoDB from "@/lib/mongodb";
-
 import WorkoutExercisesModel, {
   iWorkoutExercises,
 } from "@/models/workoutExercisesModel";

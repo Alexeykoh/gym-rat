@@ -1,4 +1,20 @@
+export enum iMeasureEnum {
+  kg = "kg",
+  lbs = "lbs",
+  count = "count",
+  s = "s",
+  min = "min",
+}
 
+export interface iOrder {
+  _id?: string;
+  exercise_id: string;
+  amount: number;
+  order: number;
+  measure: iMeasureEnum;
+}
+
+// =============================
 
 export interface iUserParameters {
   user_id: string;

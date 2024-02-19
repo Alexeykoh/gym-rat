@@ -33,7 +33,7 @@ const WorkoutForm: FC<workoutFormProps> = ({ modalAction, getWorkouts }) => {
     e.preventDefault();
     //
     setBusy(true);
-    const res = await fetch("/api/workout", {
+    const res = await fetch("/api/workouts/items", {
       method: "POST",
       body: JSON.stringify(workoutData),
     }).then((res) => {
