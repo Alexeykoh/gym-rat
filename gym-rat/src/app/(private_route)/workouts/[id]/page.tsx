@@ -162,7 +162,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
           }}
         />
       </div>
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center lg:w-fit">
         <div className="flex flex-col gap-1">
           <h1 className="text-5xl w-3/4">{workout?.name}</h1>
           <p className="text-md text-gray-500">
@@ -215,9 +215,9 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
                         className={"dnd_item"}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
+                        {...provided.dragHandleProps}
                       >
                         <WorkoutExercise
-                          dragProps={{ ...provided.dragHandleProps }}
                           isSelected={snapshot.isDragging}
                           exercise={el}
                           removeExercise={() => {

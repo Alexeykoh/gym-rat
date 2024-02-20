@@ -97,7 +97,7 @@ const Workout: FC<pageProps> = () => {
         />
       </div>
       <Search />
-      <div className={"grid grid-cols-1 lg:grid-cols-4 gap-8"}>
+      <div className={"grid grid-cols-1 gap-8"}>
         {isLoading ? (
           <PreLoader />
         ) : (
@@ -135,19 +135,21 @@ const Workout: FC<pageProps> = () => {
             {!workouts ? null : (
               <div className="flex flex-col gap-2">
                 <h2 className="text-4xl font-semibold">Previous</h2>
-                {workouts?.map(({ date, description, name, _id }, ind) => {
-                  return (
-                    <CardLayout key={ind}>
-                      <WorkoutCard
-                        icon={arm}
-                        title={name}
-                        description={description}
-                        date={date}
-                        id={_id as string}
-                      />
-                    </CardLayout>
-                  );
-                })}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                  {workouts?.map(({ date, description, name, _id }, ind) => {
+                    return (
+                      <CardLayout key={ind}>
+                        <WorkoutCard
+                          icon={arm}
+                          title={name}
+                          description={description}
+                          date={date}
+                          id={_id as string}
+                        />
+                      </CardLayout>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </>

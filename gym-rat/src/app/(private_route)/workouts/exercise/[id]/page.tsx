@@ -66,7 +66,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
 
   return (
     <>
-      <div className="w-full overflow-hidden">
+      <div className="w-full overflow-hidden lg:w-1/4">
         <div className={slider + "w-full flex flex-row  duration-200 over"}>
           <section className="flex flex-col gap-6 shrink-0 w-full">
             <div className="flex justify-between">

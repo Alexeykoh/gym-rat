@@ -15,14 +15,12 @@ type WorkoutExerciseProps = {
   isSelected: boolean;
   exercise: iWorkoutExercises;
   removeExercise: () => void;
-  dragProps: any;
 };
 
 const WorkoutExercise: FC<WorkoutExerciseProps> = ({
   isSelected,
   exercise,
   removeExercise,
-  dragProps,
 }) => {
   const { data: session, status }: any = useSession();
   const [orderItems, setOrderItems] = useState<iOrder[]>([]);
@@ -69,8 +67,8 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
   return (
     <>
       <CardLayout isSelected={isSelected}>
-        <div className="flex flex-col w-full gap-4">
-          <div {...dragProps} className={(isSelected && " text-white ")+" p-3 bg-zinc-900 rounded-full"}>
+        <div className="flex flex-col w-full gap-4 relative">
+          <div className={(isSelected && " text-white ")+" p-3 bg-zinc-900 rounded-full absolute top-0 right-0"}>
             {isSelected ? <Grab /> : <Hand />}
           </div>
           {session?.user?.role === "admin" && (

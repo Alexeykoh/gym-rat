@@ -15,9 +15,7 @@ type BadgeProps = {
 const Badge: FC<BadgeProps> = ({ value, type }) => {
   return (
     <>
-      <span
-        className={type + " text-xs font-medium me-2 px-2.5 py-0.5 rounded-xl w-fit"}
-      >
+      <span className={type + " text-md font-medium me-2 px-2 py-1 rounded-xl w-fit"}>
         {value}
       </span>
     </>

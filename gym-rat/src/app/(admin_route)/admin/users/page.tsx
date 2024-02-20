@@ -30,7 +30,7 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-6">
       <Search />
-      <ul className="flex flex-col gap-6 pb-64">
+      <ul className="grid grid-cols-1 lg:grid-cols-4 gap-6 pb-64">
         {!users
           ? null
           : users.map((el, ind) => {

@@ -34,7 +34,6 @@ export default function TypesPage() {
     });
   }
 
-  
   //
   useEffect(() => {
     getTypes();
@@ -72,7 +71,7 @@ export default function TypesPage() {
         </Modal>
       )}
 
-      <ul className="flex flex-col gap-6 w-full">
+      <ul className="gap-6 w-full grid grid-cols-1 lg:grid-cols-4">
         {!types ? (
           <p>Loading</p>
         ) : (

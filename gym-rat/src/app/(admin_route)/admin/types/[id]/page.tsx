@@ -199,7 +199,7 @@ const Page: FC<pageProps> = ({ params }) => {
             />
           </Modal>
         )}
-        <ul className="flex flex-col gap-6 w-full pb-64">
+        <ul className="grid grid-cols-1 lg:grid-cols-4 gap-6 w-full pb-64 ">
           {!types ? (
             <p>Загрузка...</p>
           ) : (
