@@ -1,5 +1,6 @@
 "use client";
 
+import { AppDispatch, RootState } from "@/app/GlobalRegux/store";
 import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
 import Badge, { BadgeType } from "@/components/ui/Badge";
@@ -7,14 +8,27 @@ import Modal from "@/components/widgets/modal/Modal";
 import WorkoutCard from "@/components/workoutCard/workoutCard";
 import { iFriend } from "@/models/friendModel";
 import { iWorkout } from "@/models/workoutModel";
+// import { RootState } from "@reduxjs/toolkit/query";
 import { Bell, BellRing, QrCode } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useQRCode } from "next-qrcode";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import arm from "../../../../public/icons/arm.svg";
+import { fetchUsers } from "@/app/GlobalRegux/Features/user/userSlice";
 
 export default function Dashboard() {
+  //
+  const { entities, loading, value } = useSelector(
+    (state: RootState) => state.user
+  );
+  console.log("=======================");
+  console.log(entities);
+  console.log("=======================");
+
+  const dispatch = useDispatch<AppDispatch>();
+  //
   const { data, status }: any = useSession();
   const { Canvas } = useQRCode();
   const [modal, setModal] = useState<boolean>(false);
@@ -52,6 +66,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getLatestWorkout();
+    dispatch(fetchUsers())
   }, []);
 
   //
@@ -101,8 +116,11 @@ export default function Dashboard() {
             )}
           </div>
           <div className="col-span-1 bg-zinc-900 p-4 rounded-2xl flex flex-col items-center h-full justify-center gap-2 relative">
-            <p>Сообщения</p>
-            {notification.length ? <BellRing /> : <Bell />}
+            {notification.length ? (
+              <BellRing size={42} className="text-orange-600" />
+            ) : (
+              <Bell size={42} />
+            )}
             {notification.length ? (
               <div className="absolute -top-2 -right-4">
                 <Badge value={notification.length + 1} type={BadgeType.Error} />
@@ -113,7 +131,9 @@ export default function Dashboard() {
         <div className="col-span-3 lg:col-span-2">
           <CardLayout>
             <div className="flex flex-col gap-4 h-full w-full">
-              <h3 className="text-2xl">Мои друзья</h3>
+              <div className="flex flex-row justify-between w-full">
+                <h3 className="text-2xl">Мои друзья</h3>
+              </div>
 
               <div className="">
                 {!friends.length ? (

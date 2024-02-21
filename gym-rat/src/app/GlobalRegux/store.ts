@@ -1,8 +1,8 @@
 "use client";
 
 import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "../GlobalRegux/Features/user/userSlice";
 import counterReducer from "./Features/counter/counterSlice";
-import userReducer from "./Features/user/userReducer";
 
 export const store = configureStore({
   reducer: {

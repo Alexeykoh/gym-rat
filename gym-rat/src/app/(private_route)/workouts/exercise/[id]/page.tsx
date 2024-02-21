@@ -1,177 +1,136 @@
 "use client";
+
 import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
-import PreLoader from "@/components/ui/PreLoader";
-import { iExercise } from "@/models/exerciseModel";
-import { iExerciseType } from "@/models/exerciseTypeModel";
-import { iWorkoutExercises } from "@/models/workoutExercisesModel";
+import BackButton from "@/components/ui/BackButton";
+import ContextMenu from "@/components/ui/ContextMenu";
+import { iMeasureEnum, iOrder } from "@/lib/types";
 import axios from "axios";
+import { Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type pageProps = { params: { id: string } };
-enum Pages {
-  Types = " ",
-  Exercises = " -translate-x-[100%] ",
-  Confirm = " -translate-x-[200%] ",
-}
 
-const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
-  const [types, setTypes] = useState<iExerciseType[]>([]);
-  const [exercises, setExercises] = useState<iExercise[]>([]);
-  const [slider, setSlider] = useState<Pages>(Pages.Types);
-  const [workoutExercises, setWorkoutExercises] = useState<iWorkoutExercises[]>(
-    []
-  );
-  const [formData, setFormData] = useState<iWorkoutExercises | null>({
-    workout_id: "",
-    exercise_id: "",
-    name: "",
-    order: 0,
-  });
+export default function Page({ params }: pageProps) {
   const router = useRouter();
   //
-  function getWorkoutExercises() {
-    axios.get("/api/workouts/exercises/" + params.id).then(({ data }) => {
-      setWorkoutExercises(data?.message);
+  const [orderItems, setOrderItems] = useState<iOrder[]>([]);
+  //
+  function getOrderItems(id: string) {
+    axios.get("/api/workouts/exercises/" + id + "/items").then(({ data }) => {
+      console.log("data", data);
+      setOrderItems(data?.message);
+    });
+  }
+  function deleteOrderItem(id: string) {
+    const answer = confirm("Удалить подход?");
+    if (!answer) {
+      return;
+    }
+    axios.delete("/api/workouts/exercises/order_item/" + id).then((data) => {
+      getOrderItems(params.id as string);
     });
   }
   //
-  async function getTypes() {
-    fetch("/api/exercises/types")
-      .then((res) => res.json())
-      .then((data) => {
-        setTypes(data?.message);
-      });
-  }
-  function getExerciseByType(type: string | undefined) {
-    axios.get("/api/exercises/items?type_id=" + type).then(({ data }) => {
-      setExercises(data?.message);
-      setSlider(Pages.Exercises);
-    });
-  }
-  async function createNewExercise() {
-    axios
-      .post("/api/workouts/exercises/" + params.id, {
-        ...formData,
-      })
-      .then(({ data }) => {
-        router.push(`/workouts/${params.id}`);
-      });
-  }
   useEffect(() => {
-    getTypes();
-    getWorkoutExercises();
+    getOrderItems(params.id as string);
   }, []);
-
+  //
   return (
-    <>
-      <div className="w-full overflow-hidden lg:w-1/4">
-        <div className={slider + "w-full flex flex-row  duration-200 over"}>
-          <section className="flex flex-col gap-6 shrink-0 w-full">
-            <div className="flex justify-between">
-              <h2 className="text-4xl font-semibold">
-                Выберите <br /> группу
-              </h2>
-              <button
-                onClick={() => {
-                  router.push(`/workouts/${params.id}`);
-                }}
-                className="p-4 text-xl bg-gray-700 rounded-2xl"
-              >
-                Назад
-              </button>
-            </div>
-
-            <div className="flex w-full flex-col gap-4">
-              {!types.length
-                ? <PreLoader/>
-                : types.map((el, ind) => {
-                    return (
-                      <div
-                        key={ind}
-                        onClick={() => {
-                          getExerciseByType(el._id);
-                        }}
-                      >
-                        <CardLayout>
-                          <p className="text-3xl">{el.name}</p>
-                        </CardLayout>
-                      </div>
-                    );
-                  })}
-            </div>
-          </section>
-          <section className="flex flex-col gap-6 shrink-0 w-full">
-            <div className="flex justify-between">
-              <h2 className="text-4xl font-semibold">
-                Выберите <br /> упражнение
-              </h2>
-              <button
-                onClick={() => {
-                  setSlider(Pages.Types);
-                }}
-                className="p-4 text-xl bg-gray-700 rounded-2xl"
-              >
-                Назад
-              </button>
-            </div>
-            <div className="flex w-full flex-col gap-4">
-              {!exercises.length
-                ? null
-                : exercises.map((el, ind) => {
-                    return (
-                      <div
-                        key={ind}
-                        onClick={() => {
-                          setSlider(Pages.Confirm);
-                          setFormData((prevData: any) => {
-                            return {
-                              ...prevData,
-                              exercise_id: el._id,
-                              workout_id: params.id,
-                              name: el.name,
-                              order: workoutExercises?.length,
-                            };
-                          });
-                        }}
-                      >
-                        <CardLayout>
-                          <p className="text-3xl">{el.name}</p>
-                        </CardLayout>
-                      </div>
-                    );
-                  })}
-            </div>
-          </section>
-          <section className="flex flex-col gap-6 shrink-0 w-full">
-            <div className="flex justify-between items-center">
-              <h2 className="text-4xl font-semibold">Подтвердить</h2>
-              <button
-                onClick={() => {
-                  setSlider(Pages.Exercises);
-                }}
-                className="p-4 text-xl bg-gray-700 rounded-2xl"
-              >
-                Назад
-              </button>
-            </div>
-            <div className="flex w-full flex-col gap-4">
-              <div className="flex gap-2">
-                <p>{"Название: "}</p>
-                <p>{formData?.name}</p>
-              </div>
-            </div>
-            <ActionButton
-              busy={false}
-              action={createNewExercise}
-              text={"Добавить упражнение"}
-            />
-          </section>
-        </div>
+    <section>
+      {/* <p>{params.id}</p> */}
+      <div className="fixed bottom-8 left-8 z-40">
+        <BackButton
+          action={() => {
+            router.back();
+          }}
+        />
       </div>
-    </>
-  );
-};
+      <div className="fixed bottom-8 right-8 z-40">
+        <ActionButton
+          text={<Plus />}
+          action={() => {
+            router.back();
+          }}
+        />
+      </div>
 
-export default WorkoutExercisePage;
+      <ul
+        className={
+          (orderItems.length ? " max-h-[1200px] " : " max-h-0 ") +
+          " flex flex-col gap-4 duration-500 overflow-y-hidden "
+        }
+      >
+        {!orderItems.length
+          ? null
+          : orderItems
+              ?.sort((a: any, b: any) => {
+                return a.order - b.order;
+              })
+              ?.map((el, ind) => {
+                return (
+                  <CardLayout key={ind}>
+                    <div className="flex gap-4 items-center">
+                      <p className="bg-zinc-800 px-3 py-1 rounded-full">
+                        {ind + 1}
+                      </p>
+                      <div className="flex flex-col gap-2 ">
+                        <div className="flex flex-row gap-4 items-center justify-between">
+                          <label className="w-1/4" htmlFor="">
+                            Значение:
+                          </label>
+                          <input
+                            className="w-1/4 text-center bg-transparent text-white px-2 py-1 "
+                            type="number"
+                            value={0}
+                          />
+                          <select
+                            className="text-white bg-transparent"
+                            name=""
+                            id=""
+                          >
+                            {Object.values(iMeasureEnum).map((el, ind) => {
+                              return (
+                                <option
+                                  className="text-black bg-transparent"
+                                  key={ind}
+                                >
+                                  {el}
+                                </option>
+                              );
+                            })}
+                          </select>
+                          <ContextMenu
+                            data={[
+                              {
+                                name: "Удалить",
+                                icon: <Trash2 />,
+                                action: () => {
+                                  // deleteOrderItem();
+                                },
+                              },
+                            ]}
+                          />
+                        </div>
+                        <div className="flex flex-row gap-4 items-center justify-between w-full">
+                          <label className="w-1/4" htmlFor="">
+                            Повторы:
+                          </label>
+                          <input
+                            className="text-center bg-transparent text-white px-2 py-1 w-1/4"
+                            type="number"
+                            value={0}
+                          />
+                          <p className="w-1/4"></p>
+                          <p className="w-1/4"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardLayout>
+                );
+              })}
+      </ul>
+    </section>
+  );
+}

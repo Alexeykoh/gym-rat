@@ -3,13 +3,12 @@
 import { iMeasureEnum, iOrder } from "@/lib/types";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
 import axios from "axios";
-import { Grab, Hand, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import CardLayout from "../cardLayout/cardLayout";
-import Badge, { BadgeType } from "./Badge";
 import ContextMenu from "./ContextMenu";
-import OrderItem from "./OrderItem";
 
 type WorkoutExerciseProps = {
   isSelected: boolean;
@@ -22,6 +21,7 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
   exercise,
   removeExercise,
 }) => {
+  const router = useRouter();
   const { data: session, status }: any = useSession();
   const [orderItems, setOrderItems] = useState<iOrder[]>([]);
   //
@@ -67,18 +67,17 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
   return (
     <>
       <CardLayout isSelected={isSelected}>
-        <div className="flex flex-col w-full gap-4 relative">
-          <div className={(isSelected && " text-white ")+" p-3 bg-zinc-900 rounded-full absolute top-0 right-0"}>
-            {isSelected ? <Grab /> : <Hand />}
-          </div>
-          {session?.user?.role === "admin" && (
-            <Badge value={exercise._id} type={BadgeType.Info} />
-          )}
+        <div
+          onClick={() => {
+            router.push(`exercise/` + exercise?._id);
+          }}
+          className="flex flex-col w-full gap-4 relative"
+        >
           <div className="flex items-center justify-between w-full">
             <p className="text-3xl w-3/4">
               <span className="">#{exercise.order + 1}</span> {exercise.name}
             </p>
-            <ContextMenu
+            {/* <ContextMenu
               data={[
                 {
                   name: "Подход",
@@ -95,10 +94,10 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
                   },
                 },
               ]}
-            />
+            /> */}
           </div>
           <div className="w-full">
-            <ul
+            {/* <ul
               className={
                 (orderItems.length ? " max-h-[1200px] " : " max-h-0 ") +
                 " flex flex-col gap-4 duration-500 overflow-y-hidden "
@@ -125,7 +124,7 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
                         />
                       );
                     })}
-            </ul>
+            </ul> */}
           </div>
         </div>
       </CardLayout>

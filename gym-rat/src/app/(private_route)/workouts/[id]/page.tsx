@@ -158,7 +158,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
         <ActionButton
           text={<Plus />}
           action={() => {
-            router.push(`/workouts/exercise/${params.id}`);
+            router.push(`/workouts/select/${params.id}`);
           }}
         />
       </div>
