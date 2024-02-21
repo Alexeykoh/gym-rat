@@ -2,12 +2,16 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "../GlobalRegux/Features/user/userSlice";
-import counterReducer from "./Features/counter/counterSlice";
+import exerciseItemsSlice from "./Features/exercises/exerciseItemsSlice";
+import typesSlice from "./Features/exercises/typesSlice";
+import workoutsSlice from "./Features/workouts/workoutsSlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     user: userReducer,
+    types: typesSlice,
+    exerciseItems: exerciseItemsSlice,
+    workouts: workoutsSlice,
   },
 });
 

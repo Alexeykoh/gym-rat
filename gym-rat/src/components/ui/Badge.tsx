@@ -6,6 +6,7 @@ export enum BadgeType {
   Access = " bg-green-300 text-green-800 border-green-400 ",
   Warn = " bg-yellow-300 text-yellow-800 border-yellow-400 ",
   Normal = " bg-gray-300 text-gray-800 border-gray-400 ",
+  Admin = " bg-lime-300 text-lime-800 border-lime-400 ",
 }
 type BadgeProps = {
   value: any;

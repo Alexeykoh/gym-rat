@@ -9,6 +9,7 @@ import WorkoutCard from "@/components/workoutCard/workoutCard";
 import { iFriend } from "@/models/friendModel";
 import { iWorkout } from "@/models/workoutModel";
 // import { RootState } from "@reduxjs/toolkit/query";
+import { fetchUsers } from "@/app/GlobalRegux/Features/user/userSlice";
 import { Bell, BellRing, QrCode } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useQRCode } from "next-qrcode";
@@ -16,18 +17,10 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import arm from "../../../../public/icons/arm.svg";
-import { fetchUsers } from "@/app/GlobalRegux/Features/user/userSlice";
 
 export default function Dashboard() {
   //
-  const { entities, loading, value } = useSelector(
-    (state: RootState) => state.user
-  );
-  console.log("=======================");
-  console.log(entities);
-  console.log("=======================");
-
-  const dispatch = useDispatch<AppDispatch>();
+ 
   //
   const { data, status }: any = useSession();
   const { Canvas } = useQRCode();
@@ -66,7 +59,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     getLatestWorkout();
-    dispatch(fetchUsers())
   }, []);
 
   //

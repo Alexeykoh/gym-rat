@@ -1,13 +1,14 @@
 "use client";
+import { RootState } from "@/app/GlobalRegux/store";
 import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
-import PreLoader from "@/components/ui/PreLoader";
 import { iExercise } from "@/models/exerciseModel";
 import { iExerciseType } from "@/models/exerciseTypeModel";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 type pageProps = { params: { id: string } };
 enum Pages {
@@ -17,12 +18,15 @@ enum Pages {
 }
 
 const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
-  const [types, setTypes] = useState<iExerciseType[]>([]);
+  const typesData = useSelector((state: RootState) => state.types);
+  const exerciseItems = useSelector((state: RootState) => state.exerciseItems);
+
+  const [types, setTypes] = useState<iExerciseType[]>(
+    typesData.entities.message
+  );
   const [exercises, setExercises] = useState<iExercise[]>([]);
   const [slider, setSlider] = useState<Pages>(Pages.Types);
-  const [workoutExercises, setWorkoutExercises] = useState<iWorkoutExercises[]>(
-    []
-  );
+
   const [formData, setFormData] = useState<iWorkoutExercises | null>({
     workout_id: "",
     exercise_id: "",
@@ -31,11 +35,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
   });
   const router = useRouter();
   //
-  function getWorkoutExercises() {
-    axios.get("/api/workouts/exercises/" + params.id).then(({ data }) => {
-      setWorkoutExercises(data?.message);
-    });
-  }
+
   //
   async function getTypes() {
     fetch("/api/exercises/types")
@@ -45,10 +45,12 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
       });
   }
   function getExerciseByType(type: string | undefined) {
-    axios.get("/api/exercises/items?type_id=" + type).then(({ data }) => {
-      setExercises(data?.message);
-      setSlider(Pages.Exercises);
-    });
+    setExercises(
+      exerciseItems.entities.message.filter(
+        (item: any) => item.type_id === type
+      )
+    );
+    setSlider(Pages.Exercises);
   }
   async function createNewExercise() {
     axios
@@ -60,8 +62,8 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
       });
   }
   useEffect(() => {
-    getTypes();
-    getWorkoutExercises();
+    // getTypes();
+    // getWorkoutExercises();
   }, []);
 
   return (
@@ -84,22 +86,20 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
             </div>
 
             <div className="flex w-full flex-col gap-4">
-              {!types.length
-                ? <PreLoader/>
-                : types.map((el, ind) => {
-                    return (
-                      <div
-                        key={ind}
-                        onClick={() => {
-                          getExerciseByType(el._id);
-                        }}
-                      >
-                        <CardLayout>
-                          <p className="text-3xl">{el.name}</p>
-                        </CardLayout>
-                      </div>
-                    );
-                  })}
+              {typesData.entities.message?.map((el: any, ind: number) => {
+                return (
+                  <div
+                    key={ind}
+                    onClick={() => {
+                      getExerciseByType(el._id);
+                    }}
+                  >
+                    <CardLayout>
+                      <p className="text-3xl">{el.name}</p>
+                    </CardLayout>
+                  </div>
+                );
+              })}
             </div>
           </section>
           <section className="flex flex-col gap-6 shrink-0 w-full">
@@ -131,7 +131,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
                               exercise_id: el._id,
                               workout_id: params.id,
                               name: el.name,
-                              order: workoutExercises?.length,
+                              order: ind,
                             };
                           });
                         }}

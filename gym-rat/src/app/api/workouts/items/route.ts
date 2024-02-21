@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 const getSwitch: any = {
   all: async () => {
-    return await WorkoutModel.find({});
+    return await WorkoutModel.find({}).sort({ date: -1 });
   },
   latest: async (id: string) => {
     const today = new Date(Date.now());
@@ -90,8 +90,34 @@ export async function GET(req: any, res: any) {
   });
   const id = userData._id.toString();
   const type = req.nextUrl.searchParams.get("type");
-  const getResult = await getSwitch[type](id);
-  //
-  const result = await WorkoutModel.find({});
-  return NextResponse.json({ message: getResult }, { status: 200 });
+  const page = req.nextUrl.searchParams.get("page");
+  if (type) {
+    const getResult = await getSwitch[type](id);
+    return NextResponse.json({ message: getResult }, { status: 200 });
+  }
+  if (page) {
+    const perPage = 4;
+    const today = new Date(Date.now());
+    const pageReq = req.nextUrl.searchParams.get("page");
+    const skip = (pageReq - 1) * perPage;
+    const totalItems = await WorkoutModel.countDocuments();
+    const items = await WorkoutModel.find({
+      user_id: id,
+      date: { $lt: today },
+    })
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(perPage);
+    //
+    return NextResponse.json(
+      {
+        message: {
+          items,
+          currentPage: page,
+          totalPages: Math.ceil(totalItems / perPage),
+        },
+      },
+      { status: 200 }
+    );
+  }
 }

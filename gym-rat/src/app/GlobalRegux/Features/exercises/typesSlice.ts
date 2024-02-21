@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchUsers = createAsyncThunk(
-  "users/getAllUsers",
+export const fetchTypes = createAsyncThunk(
+  "types/getAllTypes",
   async (thunkApi) => {
-    const response = await fetch("http://localhost:3000/api/users");
+    const response = await fetch("http://localhost:3000/api/exercises/types");
     const data = await response.json();
-    console.log("fetchUsers", data);
+    console.log("fetchTypes", data);
     return data;
   }
 );
@@ -16,8 +16,8 @@ const initialState = {
   value: 10,
 } as any;
 
-const userSlice = createSlice({
-  name: "users",
+const typesSlice = createSlice({
+  name: "types",
   initialState,
   reducers: {
     increment: (state) => {
@@ -25,17 +25,17 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.fulfilled, (state, action) => {
+    builder.addCase(fetchTypes.fulfilled, (state, action) => {
       state.loading = false;
       state.entities = action.payload;
     });
 
-    builder.addCase(fetchUsers.pending, (state, action) => {
+    builder.addCase(fetchTypes.pending, (state, action) => {
       state.loading = true;
     });
   },
 });
 
-export const { increment } = userSlice.actions;
+export const { increment } = typesSlice.actions;
 
-export default userSlice.reducer;
+export default typesSlice.reducer;

@@ -1,14 +1,17 @@
 "use client";
 
+import { AppDispatch } from "@/app/GlobalRegux/store";
 import ActionButton from "@/components/ui/ActionButton";
 import { LogIn } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
+import { useDispatch } from "react-redux";
 
 type loginProps = {};
 
 const LoginForm: FC<loginProps> = () => {
+  const dispatch = useDispatch<AppDispatch>();
   //
   const [busy, setBusy] = useState(false);
   const [formData, setFormData] = useState({
@@ -65,6 +68,7 @@ const LoginForm: FC<loginProps> = () => {
         password,
         redirect: false,
       });
+      //
       if (res?.error) {
         newErrors.login = "Wrong email or password";
         setErrors(newErrors);
