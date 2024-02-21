@@ -5,6 +5,7 @@ import BackButton from "@/components/ui/BackButton";
 import ContextMenu from "@/components/ui/ContextMenu";
 import PreLoader from "@/components/ui/PreLoader";
 import WorkoutExercise from "@/components/ui/WorkoutExercise";
+import { localStore } from "@/lib/helpers";
 import { iMeasureEnum, iOrder } from "@/lib/types";
 import { iExerciseType } from "@/models/exerciseTypeModel";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
@@ -30,6 +31,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   const router = useRouter();
   const currentDate = new Date().toISOString();
   //
+
   async function getTypes() {
     fetch("/api/exercises/types")
       .then((res) => res.json())
@@ -38,18 +40,18 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
       });
   }
   async function getWorkout() {
-    axios.get("/api/workouts/items/" + params.id).then(({ data }) => {
-      setWorkout(data?.message);
+    return axios.get("/api/workouts/items/" + params.id).then(({ data }) => {
+      return data?.message;
     });
   }
   function getWorkoutExercises() {
-    axios.get("/api/workouts/exercises/" + params.id).then(({ data }) => {
-      setExercises(
-        data?.message.sort((a: any, b: any) => {
+    return axios
+      .get("/api/workouts/exercises/" + params.id)
+      .then(({ data }) => {
+        return data?.message.sort((a: any, b: any) => {
           return a.order - b.order;
-        })
-      );
-    });
+        });
+      });
   }
   async function editWorkout(el: iWorkout) {
     const data: iWorkout = {
@@ -136,9 +138,20 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   }
   //
   useEffect(() => {
-    getWorkout();
+    // getWorkout();
     getTypes();
-    getWorkoutExercises();
+    // getWorkoutExercises();
+    localStore({
+      name: "workout",
+      fetchData: getWorkout,
+      toState: setWorkout,
+    }).then(() => {
+      localStore({
+        name: "workout",
+        fetchData: getWorkoutExercises,
+        toState: setExercises,
+      });
+    });
   }, []);
 
   //
@@ -199,7 +212,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {exercises.map((el, index) => {
+              {!exercises.length ? null : exercises?.map((el, index) => {
                 return (
                   <Draggable
                     key={el._id as string}
@@ -218,6 +231,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
                         {...provided.dragHandleProps}
                       >
                         <WorkoutExercise
+                          order={index + 1}
                           isSelected={snapshot.isDragging}
                           exercise={el}
                           removeExercise={() => {

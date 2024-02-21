@@ -3,20 +3,20 @@
 import { iMeasureEnum, iOrder } from "@/lib/types";
 import { iWorkoutExercises } from "@/models/workoutExercisesModel";
 import axios from "axios";
-import { Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import CardLayout from "../cardLayout/cardLayout";
-import ContextMenu from "./ContextMenu";
 
 type WorkoutExerciseProps = {
+  order: number;
   isSelected: boolean;
   exercise: iWorkoutExercises;
   removeExercise: () => void;
 };
 
 const WorkoutExercise: FC<WorkoutExerciseProps> = ({
+  order,
   isSelected,
   exercise,
   removeExercise,
@@ -75,7 +75,7 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
         >
           <div className="flex items-center justify-between w-full">
             <p className="text-3xl w-3/4">
-              <span className="">#{exercise.order + 1}</span> {exercise.name}
+              <span className="">#{order}</span> {exercise.name}
             </p>
             {/* <ContextMenu
               data={[

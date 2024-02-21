@@ -9,7 +9,12 @@ type ActionButtonProps = {
   type?: "submit" | "reset" | "button" | undefined;
 };
 
-const AdditionalButton: FC<ActionButtonProps> = ({ busy, action, text, type }) => {
+const AdditionalButton: FC<ActionButtonProps> = ({
+  busy,
+  action,
+  text,
+  type,
+}) => {
   return (
     <>
       <button
@@ -21,7 +26,7 @@ const AdditionalButton: FC<ActionButtonProps> = ({ busy, action, text, type }) =
         type={type || "submit"}
         className={
           (busy
-            ? " bg-gray-700 lg:hover:bg-gray-600 "
+            ? " bg-zinc-400 lg:hover:bg-zinc-300 "
             : " bg-zinc-600 lg:hover:bg-zinc-600 ") +
           " p-3 mt-4 rounded-xl text-xl text-black flex items-center w-full justify-center"
         }

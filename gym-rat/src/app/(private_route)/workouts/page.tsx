@@ -1,7 +1,6 @@
 "use client";
 import CardLayout from "@/components/cardLayout/cardLayout";
 
-import { AppDispatch } from "@/app/GlobalRegux/store";
 import WorkoutForm from "@/components/forms/workout/WorkoutForm";
 import ActionButton from "@/components/ui/ActionButton";
 import AdditionalButton from "@/components/ui/AdditionalButton";
@@ -13,7 +12,6 @@ import axios from "axios";
 import { Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import arm from "../../../../public/icons/arm.svg";
 
 type pageProps = {};
@@ -26,7 +24,7 @@ interface iLatestWorkouts {
 
 function Workout() {
   const { data, status }: any = useSession();
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   // const latestWorkoutsData = useSelector(
   //   (state: RootState) => state.workouts.entities
   // );
@@ -53,14 +51,15 @@ function Workout() {
         setLoading(false);
       });
   }
-  function getNext() {
+  async function getNext() {
     setLoading(true);
-    fetch("/api/workouts/items?type=nextOne")
+    const res = await fetch("/api/workouts/items?type=nextOne")
       .then((res) => res.json())
       .then((data) => {
-        setNext(data?.message);
         setLoading(false);
+        return data.message;
       });
+    return res;
   }
   function getPrevious() {
     setLoading(true);
@@ -71,30 +70,73 @@ function Workout() {
         setLoading(false);
       });
   }
+  async function getExerciseTypes() {
+    const res = axios.get("/api/exercises/types").then(({ data }) => {
+      return data.message;
+    });
+    return res;
+  }
+  async function getExerciseItems() {
+    const res = axios.get("/api/exercises/items").then(({ data }) => {
+      return data.message;
+    });
+    return res;
+  }
 
   function getWorkouts() {
     axios.get("/api/workouts/items?type=all").then(({ data }) => {
       setAllWorkouts(data?.message);
     });
   }
-  function getWorkoutsByPage(page: number) {
-    axios.get("/api/workouts/items?page=" + page).then(({ data }: any) => {
-      setLatestWorkouts(data?.message);
-      console.log("getWorkoutsByPage", data?.message);
-    });
+  async function getWorkoutsByPage(page: number) {
+    const res = await axios
+      .get("/api/workouts/items?page=" + page)
+      .then(({ data }: any) => {
+        return data.message;
+      });
+    return res;
   }
 
-  function loadMoreExercises() {
-    setBusy(true);
+  async function store( // todo: исправить на localStore
+    name: string,
+    fetchData: () => Promise<any>,
+    toState: any
+  ) {
+    let storedData = localStorage.getItem(name);
+    //
+    if (!storedData) {
+      // Fetch data if local storage is empty
+      const data = await fetchData();
+      if (toState) {
+        toState(data);
+      }
+      localStorage.setItem(name, JSON.stringify(data));
+      console.log("Data fetched and stored in local storage:", data);
+    } else {
+      // Fetch data again if local storage is not empty
+      console.log("Data already exists in local storage. Fetching again...");
+      if (toState) {
+        toState(JSON.parse(storedData));
+      }
+      const data = await fetchData();
+      console.log("name", name, data);
+      if (toState) {
+        toState(data);
+      }
+      localStorage.setItem(name, JSON.stringify(data));
+      console.log("Data re-fetched and updated in local storage:", data);
+    }
+  }
+  //
+  async function loadMoreExercises() {
     const nextPage = Number(latestWorkouts?.currentPage) + 1;
     if (nextPage < Number(latestWorkouts?.totalPages as number)) {
-      axios
+      return axios
         .get("/api/workouts/items?page=" + nextPage)
         .then(({ data }: any) => {
           const newItems = latestWorkouts?.items.concat(data.message.items);
           const newData = { ...data.message, items: newItems };
-          setLatestWorkouts(newData);
-          setBusy(false);
+          return newData;
         });
     }
   }
@@ -104,9 +146,16 @@ function Workout() {
 
   useEffect(() => {
     getLatest();
-    getNext();
+    // getNext();
     getPrevious();
-    getWorkoutsByPage(1);
+    store(
+      "latestWorkouts",
+      async () => getWorkoutsByPage(1),
+      setLatestWorkouts
+    );
+    store("nextWorkout", async () => getNext(), setNext); // todo: исправить на localStore
+    store("exerciseTypes", async () => getExerciseTypes(), null); // todo: исправить на localStore
+    store("exerciseItems", async () => getExerciseItems(), null); // todo: исправить на localStore
   }, []);
   //
   return (
@@ -197,7 +246,11 @@ function Workout() {
                     busy={busy}
                     text={"Показать еще "}
                     action={() => {
-                      loadMoreExercises();
+                      store(
+                        "latestWorkouts",
+                        async () => loadMoreExercises(),
+                        setLatestWorkouts
+                      );
                     }}
                   />
                 ) : null}

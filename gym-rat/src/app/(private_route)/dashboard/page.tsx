@@ -1,6 +1,5 @@
 "use client";
 
-import { AppDispatch, RootState } from "@/app/GlobalRegux/store";
 import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
 import Badge, { BadgeType } from "@/components/ui/Badge";
@@ -9,24 +8,50 @@ import WorkoutCard from "@/components/workoutCard/workoutCard";
 import { iFriend } from "@/models/friendModel";
 import { iWorkout } from "@/models/workoutModel";
 // import { RootState } from "@reduxjs/toolkit/query";
-import { fetchUsers } from "@/app/GlobalRegux/Features/user/userSlice";
 import { Bell, BellRing, QrCode } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useQRCode } from "next-qrcode";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import arm from "../../../../public/icons/arm.svg";
 
 export default function Dashboard() {
   //
- 
+
   //
   const { data, status }: any = useSession();
   const { Canvas } = useQRCode();
   const [modal, setModal] = useState<boolean>(false);
   const [friends, setFriends] = useState<iFriend[]>([]);
   const [notification, setNotification] = useState([1]);
+  const [latestWorkout, setLatestWorkout] = useState<iWorkout | null>(null);
+  // Function to fetch data from an API
+  async function fetchData() {
+    const response = await fetch("/api/workouts/items?type=latest");
+    const data = await response.json();
+    return data;
+  }
+
+  // Function to handle fetching, storing, and re-fetching data
+  async function handleData() {
+    let storedData = localStorage.getItem("lastWorkout");
+
+    if (!storedData) {
+      // Fetch data if local storage is empty
+      const data = await fetchData();
+      setLatestWorkout(data.message);
+      localStorage.setItem("lastWorkout", JSON.stringify(data));
+      console.log("Data fetched and stored in local storage:", data);
+    } else {
+      // Fetch data again if local storage is not empty
+      console.log("Data already exists in local storage. Fetching again...");
+      setLatestWorkout(JSON.parse(storedData).message);
+      const data = await fetchData();
+      setLatestWorkout(data.message);
+      localStorage.setItem("lastWorkout", JSON.stringify(data));
+      console.log("Data re-fetched and updated in local storage:", data);
+    }
+  }
 
   const currentDate = useMemo(() => {
     return new Date();
@@ -39,7 +64,7 @@ export default function Dashboard() {
     };
   }, [currentDate]);
   //
-  const [latestWorkout, setLatestWorkout] = useState<iWorkout | null>(null);
+
   //
   function getLatestWorkout() {
     fetch("/api/workouts/items?type=latest")
@@ -58,7 +83,8 @@ export default function Dashboard() {
   //
 
   useEffect(() => {
-    getLatestWorkout();
+    // getLatestWorkout();
+    handleData();
   }, []);
 
   //

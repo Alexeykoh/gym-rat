@@ -1,5 +1,4 @@
 "use client";
-import { RootState } from "@/app/GlobalRegux/store";
 import CardLayout from "@/components/cardLayout/cardLayout";
 import ActionButton from "@/components/ui/ActionButton";
 import { iExercise } from "@/models/exerciseModel";
@@ -8,7 +7,6 @@ import { iWorkoutExercises } from "@/models/workoutExercisesModel";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 type pageProps = { params: { id: string } };
 enum Pages {
@@ -18,12 +16,10 @@ enum Pages {
 }
 
 const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
-  const typesData = useSelector((state: RootState) => state.types);
-  const exerciseItems = useSelector((state: RootState) => state.exerciseItems);
+  // const typesData = useSelector((state: RootState) => state.types);
+  // const exerciseItems = useSelector((state: RootState) => state.exerciseItems);
 
-  const [types, setTypes] = useState<iExerciseType[]>(
-    typesData.entities.message
-  );
+  const [types, setTypes] = useState<iExerciseType[]>([]);
   const [exercises, setExercises] = useState<iExercise[]>([]);
   const [slider, setSlider] = useState<Pages>(Pages.Types);
 
@@ -38,18 +34,13 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
 
   //
   async function getTypes() {
-    fetch("/api/exercises/types")
-      .then((res) => res.json())
-      .then((data) => {
-        setTypes(data?.message);
-      });
+    let storedData = localStorage.getItem("exerciseTypes");
+    setTypes(JSON.parse(storedData as string));
   }
   function getExerciseByType(type: string | undefined) {
-    setExercises(
-      exerciseItems.entities.message.filter(
-        (item: any) => item.type_id === type
-      )
-    );
+    let storedData = localStorage.getItem("exerciseItems");
+    let data = JSON.parse(storedData as string);
+    setExercises(data.filter((item: any) => item.type_id === type));
     setSlider(Pages.Exercises);
   }
   async function createNewExercise() {
@@ -62,7 +53,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
       });
   }
   useEffect(() => {
-    // getTypes();
+    getTypes();
     // getWorkoutExercises();
   }, []);
 
@@ -86,7 +77,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
             </div>
 
             <div className="flex w-full flex-col gap-4">
-              {typesData.entities.message?.map((el: any, ind: number) => {
+              {types?.map((el: any, ind: number) => {
                 return (
                   <div
                     key={ind}
