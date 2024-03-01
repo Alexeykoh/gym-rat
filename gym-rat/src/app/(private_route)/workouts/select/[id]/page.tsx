@@ -1,9 +1,11 @@
 "use client";
 import CardLayout from "@/components/cardLayout/cardLayout";
-import ActionButton from "@/components/ui/ActionButton";
-import { iExercise } from "@/models/exerciseModel";
-import { iExerciseType } from "@/models/exerciseTypeModel";
-import { iWorkoutExercises } from "@/models/workoutExercisesModel";
+import { apiEndpoints } from "@/lib/endpoints/apiEndpoints";
+import { localStore, localStoreEnum } from "@/lib/helpers";
+import { iExercise } from "@/models/ExerciseModel";
+import { iExerciseType } from "@/models/ExerciseTypeModel";
+import { iWorkoutExercises } from "@/models/WorkoutExercisesModel";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
@@ -53,8 +55,16 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
       });
   }
   useEffect(() => {
-    getTypes();
-    // getWorkoutExercises();
+    localStore({
+      name: localStoreEnum.exerciseTypes,
+      fetchData: async () => apiEndpoints.exercises.types.all(),
+      toState: setTypes,
+    });
+    localStore({
+      name: localStoreEnum.exerciseItems,
+      fetchData: async () => apiEndpoints.exercises.items.all(),
+      toState: setExercises,
+    });
   }, []);
 
   return (

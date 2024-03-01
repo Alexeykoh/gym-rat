@@ -1,8 +1,8 @@
 "use client";
 
 import CardLayout from "@/components/cardLayout/cardLayout";
-import { iUser } from "@/models/userModel";
-import { iWorkout } from "@/models/workoutModel";
+import { iUserData } from "@/lib/interfaces/User.interface";
+import { iWorkout } from "@/lib/interfaces/Workouts.interface";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ type WorkoutPageProps = {
 };
 
 const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
-  const [user, setUser] = useState<iUser | null>(null);
+  const [user, setUser] = useState<iUserData | null>(null);
   const [workouts, setWorkouts] = useState<iWorkout[]>([]);
   //
   function getUserById(id: string) {

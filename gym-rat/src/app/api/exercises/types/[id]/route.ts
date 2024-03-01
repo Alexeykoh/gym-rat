@@ -1,6 +1,6 @@
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseModel from "@/models/exerciseModel";
-import ExerciseTypeModel, { iExerciseType } from "@/models/exerciseTypeModel";
+import ExerciseModel from "@/models/ExerciseModel";
+import ExerciseTypeModel, { iExerciseType } from "@/models/ExerciseTypeModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

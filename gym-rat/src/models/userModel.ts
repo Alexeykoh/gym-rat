@@ -1,23 +1,21 @@
+import { enumUserRole, iUser } from "@/lib/interfaces/User.interface";
 import bcrypt from "bcrypt";
 import mongoose, { Schema } from "mongoose";
-
-export interface iUser {
-  _id?: string;
-  email: string;
-  password: string;
-  role: "admin" | "user";
-  avatar?: string;
-  name: string;
-}
-
+//
+const modelName = "user";
+//
 const userSchema: Schema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["admin", "user"], default: "user" },
+  role: {
+    type: String,
+    enum: Object.keys(enumUserRole),
+    default: enumUserRole.user,
+  },
   avatar: { type: String, required: false },
   name: { type: String, required: true },
 });
-
+//
 userSchema.pre("save", async function (next) {
   if (this.isModified("password") || this.isNew) {
     try {
@@ -32,7 +30,7 @@ userSchema.pre("save", async function (next) {
     return next();
   }
 });
-
+//
 userSchema.methods.comparePassword = async function (password: any) {
   try {
     return await bcrypt.compare(password, this.password);
@@ -40,8 +38,8 @@ userSchema.methods.comparePassword = async function (password: any) {
     throw new Error(error);
   }
 };
-
+//
 const UserModel: any =
-  mongoose.models.user || mongoose.model<iUser>("user", userSchema);
-
+  mongoose.models[modelName] || mongoose.model<iUser>(modelName, userSchema);
+//
 export default UserModel;

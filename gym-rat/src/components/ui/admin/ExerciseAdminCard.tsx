@@ -1,9 +1,9 @@
 "use client";
 
-import { iExercise } from "@/models/exerciseModel";
+import { iExercise } from "@/models/ExerciseModel";
 import { FilePenLine, Trash2 } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import Badge, { BadgeType } from "../Badge";
+import TextBadge, { enumTextBadge } from "../../../shared/ui/badges/TextBadge";
 import ContextMenu from "../ContextMenu";
 
 interface ExerciseAdminCardProps extends iExercise {
@@ -36,7 +36,7 @@ const ExerciseAdminCard: FC<ExerciseAdminCardProps> = ({
         <div className="flex flex-col">
           <div className="flex flex-col gap-2 ">
             <p className="font-semibold text-2xl">{name}</p>
-            <Badge value={_id} type={BadgeType.Normal} />
+            <TextBadge value={_id} type={enumTextBadge.Normal} />
           </div>
           <p>{description}</p>
         </div>

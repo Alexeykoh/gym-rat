@@ -1,7 +1,7 @@
 "use client";
 
-import ActionButton from "@/components/ui/ActionButton";
-import { iExerciseType } from "@/models/exerciseTypeModel";
+import { iExerciseType } from "@/models/ExerciseTypeModel";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { useState } from "react";
 
 type pageProps = {

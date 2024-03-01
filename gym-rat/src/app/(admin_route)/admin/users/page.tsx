@@ -1,14 +1,14 @@
 "use client";
 
-import Search from "@/components/ui/Search";
-import { iUser } from "@/models/userModel";
+import { iUserData } from "@/lib/interfaces/User.interface";
+import SearchForm from "@/widgets/search/search";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [users, setUsers] = useState<iUser[]>([]);
+  const [users, setUsers] = useState<iUserData[]>([]);
   //
   async function getUsers() {
     setLoading(true);
@@ -29,7 +29,7 @@ export default function Page() {
   }
   return (
     <div className="flex flex-col gap-6">
-      <Search />
+      <SearchForm />
       <ul className="grid grid-cols-1 lg:grid-cols-4 gap-6 pb-64">
         {!users
           ? null

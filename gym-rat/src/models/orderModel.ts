@@ -1,6 +1,8 @@
-import { iOrder } from "@/lib/types";
+import { iExerciseOrder } from "@/lib/interfaces/ExerciseOrder.interface";
 import mongoose, { Schema } from "mongoose";
-
+//
+const modelName = "exercise_order";
+//
 const orderSchema: Schema = new Schema({
   exercise_id: { type: String, required: true },
   amount: { type: Number, required: false, default: 0 },
@@ -11,9 +13,9 @@ const orderSchema: Schema = new Schema({
     default: "kg",
   },
 });
-
+//
 const OrderModel: any =
-  mongoose.models.exercise_order ||
-  mongoose.model<iOrder>("exercise_order", orderSchema);
-
+  mongoose.models[modelName] ||
+  mongoose.model<iExerciseOrder>(modelName, orderSchema);
+//
 export default OrderModel;

@@ -31,31 +31,65 @@ interface iLocalStore {
   name: string;
   fetchData: () => Promise<any>;
   toState: any;
+  loading?: any;
 }
+//
 
-export async function localStore({ name, fetchData, toState }: iLocalStore) {
+export enum localStoreEnum {
+  exerciseItems = "exerciseItems",
+  exerciseTypes = "exerciseTypes",
+  currentWorkout = "currentWorkout",
+  nextWorkout = "nextWorkout",
+  latestWorkouts = "latestWorkouts",
+}
+export async function localStore({
+  name,
+  fetchData,
+  toState,
+  loading,
+}: iLocalStore) {
+  if (loading) {
+    loading(true);
+  }
   let storedData = localStorage.getItem(name);
   //
   if (!storedData) {
-    // Fetch data if local storage is empty
     const data = await fetchData();
     if (toState) {
       toState(data);
     }
     localStorage.setItem(name, JSON.stringify(data));
-    console.log("Data fetched and stored in local storage:", data);
+    if (loading) {
+      loading(false);
+    }
   } else {
-    // Fetch data again if local storage is not empty
-    console.log("Data already exists in local storage. Fetching again...");
+    if (loading) {
+      loading(false);
+    }
+
     if (toState) {
       toState(JSON.parse(storedData));
     }
     const data = await fetchData();
-    console.log("name", name, data);
+
     if (toState) {
       toState(data);
     }
     localStorage.setItem(name, JSON.stringify(data));
-    console.log("Data re-fetched and updated in local storage:", data);
+  }
+}
+
+export async function LocalStorageAPI({ name, get }: iLocalStorageAPI) {
+  let storedData = localStorage.getItem(name);
+  if (!storedData || storedData === "undefined") {
+    const data = await get();
+    localStorage.setItem(name, JSON.stringify(data));
+    return data;
+  } else {
+    const asyncStoreUpdate = async () => {
+      const data = await get();
+      localStorage.setItem(name, JSON.stringify(data));
+    };
+    return JSON.parse(storedData);
   }
 }

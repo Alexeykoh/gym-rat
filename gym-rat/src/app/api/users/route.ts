@@ -1,5 +1,6 @@
+import { iUser } from "@/lib/interfaces/User.interface";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/userModel";
+import UserModel from "@/models/UserModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -7,8 +8,12 @@ export async function GET(req: any) {
   // get all users
   //
   const session = await getServerSession(req);
+  const emailSearchParams = req.nextUrl.searchParams;
+  console.log("emailSearchParams", emailSearchParams);
+  //
   // Check if the user is authenticated
-  console.log("session", session);
+  const par = Object.fromEntries(emailSearchParams);
+  console.log("session", par);
   if (!session) {
     return NextResponse.json(
       { error: "User is not authenticated" },
@@ -18,6 +23,7 @@ export async function GET(req: any) {
   //
   await connectMongoDB();
   //
-  const users = await UserModel.find();
-  return NextResponse.json({ users }, { status: 200 });
+
+  const usersResponse: iUser[] = await UserModel.find({ ...par });
+  return NextResponse.json({ usersResponse }, { status: 200 });
 }

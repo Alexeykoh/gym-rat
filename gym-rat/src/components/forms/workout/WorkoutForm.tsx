@@ -1,5 +1,5 @@
 "use client";
-import ActionButton from "@/components/ui/ActionButton";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { AppDispatch } from "@/app/GlobalRegux/store";
-import ActionButton from "@/components/ui/ActionButton";
+import { AppDispatch } from "@/app/GlobalRedux/store";
+import { UserService } from "@/services/user.service";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { LogIn } from "lucide-react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -63,13 +63,12 @@ const LoginForm: FC<loginProps> = () => {
     } else {
       // Form is valid, submit data to server
       setBusy(true);
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      const loginUser = await UserService.login({
+        email: email,
+        password: password,
       });
-      //
-      if (res?.error) {
+      console.log("loginUser", loginUser);
+      if (loginUser?.error) {
         newErrors.login = "Wrong email or password";
         setErrors(newErrors);
         setBusy(false);

@@ -1,7 +1,7 @@
 import connectMongoDB from "@/lib/mongodb";
 import WorkoutExercisesModel, {
   iWorkoutExercises,
-} from "@/models/workoutExercisesModel";
+} from "@/models/WorkoutExercisesModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

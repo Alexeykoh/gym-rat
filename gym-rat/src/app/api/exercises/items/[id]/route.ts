@@ -1,5 +1,5 @@
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseModel, { iExercise } from "@/models/exerciseModel";
+import ExerciseModel, { iExercise } from "@/models/ExerciseModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -67,7 +67,7 @@ export async function DELETE(req: any, { params }: any) {
     );
   }
   //
-  await connectMongoDB(); 
+  await connectMongoDB();
   await ExerciseModel.findByIdAndDelete(params.id);
   return NextResponse.json({ message: "Exercise was delete" }, { status: 200 });
 }

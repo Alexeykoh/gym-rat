@@ -1,5 +1,5 @@
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/userModel";
+import UserModel from "@/models/UserModel";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -20,14 +20,9 @@ const authOption: NextAuthOptions = {
         await connectMongoDB();
         //
         const user = await UserModel.findOne({ email: email });
-        if (!user) throw Error("email/password mismatch");
+        if (!user) throw Error("Неверный email или пароль");
         const passwordMatch = await user.comparePassword(password);
-        console.log("passwordMatch", passwordMatch, [
-          user.name,
-          user.email,
-          password,
-        ]);
-        if (!passwordMatch) throw Error("email/password mismatch");
+        if (!passwordMatch) throw Error("Неверный email или пароль");
         //
         return {
           name: user.name,

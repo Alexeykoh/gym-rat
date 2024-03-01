@@ -1,7 +1,9 @@
 "use client";
-
-import { iMeasureEnum, iOrder } from "@/lib/types";
-import { iWorkoutExercises } from "@/models/workoutExercisesModel";
+import {
+  iExerciseOrder,
+  iMeasureEnum,
+} from "@/lib/interfaces/ExerciseOrder.interface";
+import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -23,12 +25,27 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
 }) => {
   const router = useRouter();
   const { data: session, status }: any = useSession();
-  const [orderItems, setOrderItems] = useState<iOrder[]>([]);
+  const [orderItems, setOrderItems] = useState<iExerciseOrder[]>([]);
   //
-  function getOrderItems(id: string) {
-    axios.get("/api/workouts/exercises/" + id + "/items").then(({ data }) => {
-      setOrderItems(data?.message);
-    });
+  async function storeOrders() {
+    const storeName = "exerciseOrders";
+    let storedData = localStorage.getItem(storeName);
+    //
+    if (!storedData) {
+      const data = await getOrderItems(exercise._id as string);
+      console.log("storeOrders", data);
+    }
+  }
+
+  //
+  async function getOrderItems(id: string) {
+    return axios
+      .get("/api/workouts/exercises/" + id + "/items")
+      .then(({ data }) => {
+        // setOrderItems(data?.message);
+        console.log("getOrderItems", data);
+        return data?.message;
+      });
   }
   //
   function deleteOrderItem(id: string) {
@@ -61,7 +78,8 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
       });
   }
   useEffect(() => {
-    getOrderItems(exercise._id as string);
+    // getOrderItems(exercise._id as string);
+    storeOrders();
   }, []);
   //
   return (

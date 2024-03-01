@@ -1,8 +1,8 @@
 "use client";
 
-import ActionButton from "@/components/ui/ActionButton";
-import Badge, { BadgeType } from "@/components/ui/Badge";
-import { iExercise } from "@/models/exerciseModel";
+import { iExercise } from "@/models/ExerciseModel";
+import TextBadge, { enumTextBadge } from "@/shared/ui/badges/TextBadge";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { useState } from "react";
 import { iErrors, pageProps } from "./types";
 
@@ -85,7 +85,7 @@ export default function ExerciseForm({ typeID, onSuccess, name }: pageProps) {
   return (
     <form action={handleSubmit} className="flex flex-col gap-4">
       <h1 className="text-4xl">{name}</h1>
-      <Badge value={typeID} type={BadgeType.Info} />
+      <TextBadge value={typeID} type={enumTextBadge.Info} />
       <div className="flex flex-col w-full">
         <label className="p-2">
           Название <span className="text-red-400">*</span>

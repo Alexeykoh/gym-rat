@@ -1,12 +1,16 @@
+import { iWorkout } from "@/lib/interfaces/Workouts.interface";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/userModel";
-import WorkoutModel, { iWorkout } from "@/models/workoutModel";
+import OrderModel from "@/models/OrderModel";
+import UserModel from "@/models/UserModel";
+import WorkoutExercisesModel from "@/models/WorkoutExercisesModel";
+import WorkoutModel from "@/models/WorkoutModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 const getSwitch: any = {
   all: async () => {
-    return await WorkoutModel.find({}).sort({ date: -1 });
+    const result = await WorkoutModel.find({}).sort({ date: -1 }) as iWorkout[];
+    return result;
   },
   latest: async (id: string) => {
     const today = new Date(Date.now());
@@ -93,29 +97,46 @@ export async function GET(req: any, res: any) {
   const page = req.nextUrl.searchParams.get("page");
   if (type) {
     const getResult = await getSwitch[type](id);
-    return NextResponse.json({ message: getResult }, { status: 200 });
+    return NextResponse.json(getResult, { status: 200 });
   }
   if (page) {
+    const storeObject = {
+      exercises: [],
+      workouts: [],
+      orders: [],
+    };
+    //
     const perPage = 4;
     const today = new Date(Date.now());
     const pageReq = req.nextUrl.searchParams.get("page");
     const skip = (pageReq - 1) * perPage;
     const totalItems = await WorkoutModel.countDocuments();
-    const items = await WorkoutModel.find({
+    const workouts = await WorkoutModel.find({
       user_id: id,
       date: { $lt: today },
     })
       .sort({ date: -1 })
       .skip(skip)
       .limit(perPage);
+    storeObject.workouts = workouts;
+    //
+    const itemsID = workouts.map((el: any) => el._id.toString());
+    const exercises = await WorkoutExercisesModel.find({
+      workout_id: { $in: itemsID },
+    });
+    storeObject.exercises = exercises;
+    //
+    const exercisesId = exercises.map((el: any) => el._id.toString());
+    const orders = await OrderModel.find({
+      exercise_id: { $in: exercisesId },
+    });
+    storeObject.orders = orders;
     //
     return NextResponse.json(
       {
-        message: {
-          items,
-          currentPage: page,
-          totalPages: Math.ceil(totalItems / perPage),
-        },
+        storeObject,
+        currentPage: page,
+        totalPages: Math.ceil(totalItems / perPage),
       },
       { status: 200 }
     );

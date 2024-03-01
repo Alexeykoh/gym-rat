@@ -1,15 +1,14 @@
 "use client";
 
-import ActionButton from "@/components/ui/ActionButton";
 import BackButton from "@/components/ui/BackButton";
 import ContextMenu from "@/components/ui/ContextMenu";
 import PreLoader from "@/components/ui/PreLoader";
 import WorkoutExercise from "@/components/ui/WorkoutExercise";
-import { localStore } from "@/lib/helpers";
-import { iMeasureEnum, iOrder } from "@/lib/types";
-import { iExerciseType } from "@/models/exerciseTypeModel";
-import { iWorkoutExercises } from "@/models/workoutExercisesModel";
-import { iWorkout } from "@/models/workoutModel";
+import { iMeasureEnum } from "@/lib/interfaces/ExerciseOrder.interface";
+import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
+import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
+import { iWorkout } from "@/lib/interfaces/Workouts.interface";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import axios from "axios";
 import { Plus, Settings, SquarePen, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,10 +22,17 @@ type WorkoutPageProps = {
 
 const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   //
+  const [loading, setLoading] = useState<boolean>(false);
   const [context, setContext] = useState<boolean>(false);
   const [workout, setWorkout] = useState<iWorkout | null>(null);
-  const [types, setTypes] = useState<iExerciseType[]>([]);
-  const [exercises, setExercises] = useState<iWorkoutExercises[]>([]);
+  const [types, setTypes] = useState<iWorkoutExerciseType[]>([]);
+  const [exercises, setExercises] = useState<iWorkoutExercises[]>(
+    JSON.parse(
+      localStorage.getItem("localWorkouts") as any
+    )?.storeObject?.exercises.filter(
+      (el: any) => el.workout_id === params.id
+    ) || []
+  );
   //
   const router = useRouter();
   const currentDate = new Date().toISOString();
@@ -137,25 +143,34 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
       });
   }
   //
+
+  async function storeWorkouts() {
+    const storeName = "workout";
+    let storedData = localStorage.getItem(storeName);
+    if (!storedData) {
+    }
+  }
+  //
   useEffect(() => {
-    // getWorkout();
-    getTypes();
-    // getWorkoutExercises();
-    localStore({
-      name: "workout",
-      fetchData: getWorkout,
-      toState: setWorkout,
-    }).then(() => {
-      localStore({
-        name: "workout",
-        fetchData: getWorkoutExercises,
-        toState: setExercises,
-      });
-    });
+    //
+    // // getWorkout();
+    // getTypes();
+    // // getWorkoutExercises();
+    // localStore({
+    //   name: "workout",
+    //   fetchData: getWorkout,
+    //   toState: setWorkout,
+    // });
+    // localStore({
+    //   name: "exercises",
+    //   fetchData: getWorkoutExercises,
+    //   toState: setExercises,
+    //   loading: setLoading,
+    // });
   }, []);
 
   //
-  if (!workout && !types.length && !exercises.length) {
+  if (loading) {
     return <PreLoader />;
   }
   return (
@@ -179,7 +194,9 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
         <div className="flex flex-col gap-1">
           <h1 className="text-5xl w-3/4">{workout?.name}</h1>
           <p className="text-md text-gray-500">
-            {new Date(workout?.date as string).toLocaleDateString("ru-RU")}
+            {workout?.date
+              ? new Date(workout?.date as string).toLocaleDateString("ru-RU")
+              : null}
           </p>
         </div>
         <ContextMenu
@@ -212,37 +229,39 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {!exercises.length ? null : exercises?.map((el, index) => {
-                return (
-                  <Draggable
-                    key={el._id as string}
-                    draggableId={el._id as string}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <li
-                        style={getStyle(
-                          provided.draggableProps.style,
-                          snapshot
-                        )}
-                        className={"dnd_item"}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+              {!exercises.length
+                ? null
+                : exercises?.map((el, index) => {
+                    return (
+                      <Draggable
+                        key={el._id as string}
+                        draggableId={el._id as string}
+                        index={index}
                       >
-                        <WorkoutExercise
-                          order={index + 1}
-                          isSelected={snapshot.isDragging}
-                          exercise={el}
-                          removeExercise={() => {
-                            removeExercise(el._id);
-                          }}
-                        />
-                      </li>
-                    )}
-                  </Draggable>
-                );
-              })}
+                        {(provided, snapshot) => (
+                          <li
+                            style={getStyle(
+                              provided.draggableProps.style,
+                              snapshot
+                            )}
+                            className={"dnd_item"}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <WorkoutExercise
+                              order={index + 1}
+                              isSelected={snapshot.isDragging}
+                              exercise={el}
+                              removeExercise={() => {
+                                removeExercise(el._id);
+                              }}
+                            />
+                          </li>
+                        )}
+                      </Draggable>
+                    );
+                  })}
               {provided.placeholder}
             </ul>
           )}

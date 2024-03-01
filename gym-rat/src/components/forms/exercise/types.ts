@@ -1,4 +1,4 @@
-import { iExercise } from "@/models/exerciseModel";
+import { iExercise } from "@/models/ExerciseModel";
 
 export type pageProps = {
   typeID: string;

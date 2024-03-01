@@ -1,9 +1,9 @@
 import connectMongoDB from "@/lib/mongodb";
-import { iExerciseType } from "@/models/exerciseTypeModel";
-import OrderModel from "@/models/orderModel";
+import { iExerciseType } from "@/models/ExerciseTypeModel";
+import OrderModel from "@/models/OrderModel";
 import WorkoutExercisesModel, {
   iWorkoutExercises,
-} from "@/models/workoutExercisesModel";
+} from "@/models/WorkoutExercisesModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -22,9 +22,14 @@ export async function GET(req: any, { params }: any) {
     //
     await connectMongoDB();
     //
+    let result = [];
     const allExerciseTypes = await WorkoutExercisesModel.find({
       workout_id: params.id,
     });
+    allExerciseTypes.forEach((el: any, ind: number) => {
+      console.log(el._id.toString());
+    });
+    // console.log(`allExerciseTypes`, allExerciseTypes);
     return NextResponse.json({ message: allExerciseTypes }, { status: 200 });
   } catch (error: any) {
     console.error("error", error.message);

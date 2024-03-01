@@ -1,11 +1,10 @@
 "use client";
 
 import ExerciseTypeForm from "@/components/forms/exerciseType/exerciseTypeForm";
-import ActionButton from "@/components/ui/ActionButton";
-import Badge, { BadgeType } from "@/components/ui/Badge";
-import Search from "@/components/ui/Search";
 import Modal from "@/components/widgets/modal/Modal";
-import { iExerciseType } from "@/models/exerciseTypeModel";
+import { iExerciseType } from "@/models/ExerciseTypeModel";
+import TextBadge, { enumTextBadge } from "@/shared/ui/badges/TextBadge";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { MousePointerClick, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -83,7 +82,7 @@ export default function TypesPage() {
                 className="p-4 bg-gray-100/20 rounded-lg flex items-start justify-between"
               >
                 <div className="flex flex-col gap-2">
-                  <Badge value={el._id} type={BadgeType.Info} />
+                  <TextBadge value={el._id} type={enumTextBadge.Info} />
                   <p className="font-semibold text-2xl">{el?.name}</p>
                   <p>{el?.description}</p>
                 </div>

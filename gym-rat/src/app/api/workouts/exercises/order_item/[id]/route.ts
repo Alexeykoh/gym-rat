@@ -1,6 +1,6 @@
 import connectMongoDB from "@/lib/mongodb";
 import { iOrder } from "@/lib/types";
-import OrderModel from "@/models/orderModel";
+import OrderModel from "@/models/OrderModel";
 
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";

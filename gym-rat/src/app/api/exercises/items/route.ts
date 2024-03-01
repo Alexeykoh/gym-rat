@@ -1,6 +1,6 @@
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseModel, { iExercise } from "@/models/exerciseModel";
-import UserModel from "@/models/userModel";
+import ExerciseModel, { iExercise } from "@/models/ExerciseModel";
+import UserModel from "@/models/UserModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -42,7 +42,7 @@ export async function GET(req: any, res: any) {
   } else {
     console.log("get all", typeIdParam !== null);
     const result = await ExerciseModel.find({});
-    return NextResponse.json({ message: result }, { status: 200 });
+    return NextResponse.json([...result], { status: 200 });
   }
 
   //

@@ -1,5 +1,6 @@
+import { iUserData } from "@/lib/interfaces/User.interface";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel, { iUser } from "@/models/userModel";
+import UserModel from "@/models/UserModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -14,7 +15,7 @@ export async function POST(req: any) {
     //     { status: 401 }
     //   );
     // }
-    const params: iUser = await req.json(); // get params from request
+    const params: iUserData = await req.json(); // get params from request
     await connectMongoDB(); // connect to BD
     const oldUser = await UserModel.findOne({ email: params.email }); // check that user was created
     if (oldUser) {
@@ -33,6 +34,3 @@ export async function POST(req: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-
-
-

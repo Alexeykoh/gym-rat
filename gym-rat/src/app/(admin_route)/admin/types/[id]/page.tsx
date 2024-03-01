@@ -1,14 +1,14 @@
 "use client";
 
 import ExerciseForm from "@/components/forms/exercise/exerciseForm";
-import ActionButton from "@/components/ui/ActionButton";
 import BackButton from "@/components/ui/BackButton";
-import Badge, { BadgeType } from "@/components/ui/Badge";
 import ContextMenu from "@/components/ui/ContextMenu";
 import ExerciseAdminCard from "@/components/ui/admin/ExerciseAdminCard";
 import Modal from "@/components/widgets/modal/Modal";
-import { iExercise } from "@/models/exerciseModel";
-import { iExerciseType } from "@/models/exerciseTypeModel";
+import { iExercise } from "@/models/ExerciseModel";
+import { iExerciseType } from "@/models/ExerciseTypeModel";
+import TextBadge, { enumTextBadge } from "@/shared/ui/badges/TextBadge";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import axios from "axios";
 import { FilePenLine, Plus, RefreshCw, Settings, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -150,7 +150,7 @@ const Page: FC<pageProps> = ({ params }) => {
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-4">
           <h1 className="text-6xl">{currentType?.name}</h1>
-          <Badge value={params.id} type={BadgeType.Normal} />
+          <TextBadge value={params.id} type={enumTextBadge.Normal} />
         </div>
         <ContextMenu
           icon={<Settings className="active:rotate-180 duration-150" />}

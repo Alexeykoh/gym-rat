@@ -1,7 +1,7 @@
 "use client";
 
-import ActionButton from "@/components/ui/ActionButton";
 import { validatePassword } from "@/lib/helpers";
+import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { UserPlus } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

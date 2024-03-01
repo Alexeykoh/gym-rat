@@ -1,6 +1,6 @@
 import connectMongoDB from "@/lib/mongodb";
-import { iExercise } from "@/models/exerciseModel";
-import WorkoutModel from "@/models/workoutModel";
+import { iExercise } from "@/models/ExerciseModel";
+import WorkoutModel from "@/models/WorkoutModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -19,6 +19,12 @@ export async function GET(req: any, { params }: any) {
   await connectMongoDB();
   //
   const result = await WorkoutModel.findOne({ _id: params.id });
+  // result.forEach((el: any) => {
+
+  //   console.log(el);
+  // });
+
+  // console.log("result", result);
   return NextResponse.json({ message: result }, { status: 200 });
 }
 
