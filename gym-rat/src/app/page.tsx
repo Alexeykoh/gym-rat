@@ -1,10 +1,13 @@
-import Header from "./components/header/header";
+"use client";
+
+import Logo from "@/components/logo/logo";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+  redirect("/sign-in");
   return (
-    <>
-      <Header />
-      <main className=""></main>
-    </>
+    <div className="flex flex-col gap-6 w-screen h-screen justify-center items-center bgImage object-contain backdrop-brightness-50">
+      <Logo />
+    </div>
   );
 }
