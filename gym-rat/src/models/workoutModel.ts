@@ -11,15 +11,15 @@ const workoutSchema: Schema = new Schema({
   description: { type: String, required: false },
 });
 //
-workoutSchema.methods.comparePassword = async function (password: any) {
+workoutSchema.methods.comparePassword = async function (password: string) {
   try {
     return await bcrypt.compare(password, this.password);
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(error as string);
   }
 };
 //
-const WorkoutModel: any =
+const WorkoutModel =
   mongoose.models[modelName] ||
   mongoose.model<iWorkout>(modelName, workoutSchema);
 //

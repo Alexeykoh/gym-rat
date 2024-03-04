@@ -2,13 +2,10 @@
 import useLoginAuthorization from "@/features/useLoginAuthorization";
 import { iUserService } from "@/lib/interfaces/UserService.interface";
 import ActionButton from "@/shared/ui/buttons/ActionButton";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 const LoginForm: React.FC = () => {
-  const router = useRouter();
-  const [loginErr, setLoginErr] = useState<string>("");
   const {
     register,
     handleSubmit,

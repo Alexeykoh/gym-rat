@@ -18,28 +18,24 @@ const userSchema: Schema = new Schema({
 //
 userSchema.pre("save", async function (next) {
   if (this.isModified("password") || this.isNew) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(this.password as string, salt);
-      this.password = hash;
-      next();
-    } catch (error: any) {
-      next(error);
-    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(this.password as string, salt);
+    this.password = hash;
+    next();
   } else {
     return next();
   }
 });
 //
-userSchema.methods.comparePassword = async function (password: any) {
+userSchema.methods.comparePassword = async function (password: string) {
   try {
     return await bcrypt.compare(password, this.password);
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(error as string);
   }
 };
 //
-const UserModel: any =
+const UserModel =
   mongoose.models[modelName] || mongoose.model<iUser>(modelName, userSchema);
 //
 export default UserModel;

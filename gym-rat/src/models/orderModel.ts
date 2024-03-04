@@ -14,7 +14,7 @@ const orderSchema: Schema = new Schema({
   },
 });
 //
-const OrderModel: any =
+const OrderModel =
   mongoose.models[modelName] ||
   mongoose.model<iExerciseOrder>(modelName, orderSchema);
 //

@@ -10,7 +10,7 @@ const workoutExercisesSchema: Schema = new Schema({
   order: { type: Number, required: true },
 });
 //
-const WorkoutExercisesModel: any =
+const WorkoutExercisesModel =
   mongoose.models[modelName] ||
   mongoose.model<iWorkoutExercises>(modelName, workoutExercisesSchema);
 //

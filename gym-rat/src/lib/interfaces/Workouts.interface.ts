@@ -5,3 +5,9 @@ export interface iWorkout {
   name: string;
   description: string;
 }
+
+export interface iWorkoutResponse {
+  currentPage: number;
+  totalPages: number;
+  workouts: iWorkout[];
+}

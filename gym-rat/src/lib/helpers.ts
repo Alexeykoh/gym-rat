@@ -19,77 +19,17 @@ export function validatePassword(password: string) {
 }
 
 export function getCurrentDate() {
-  let date = new Date();
-  let year = date.getFullYear();
-  let month = (1 + date.getMonth()).toString().padStart(2, "0");
-  let day = date.getDate().toString().padStart(2, "0");
-  let formattedDate = `${year}-${month}-${day}`;
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = (1 + date.getMonth()).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 }
-
-interface iLocalStore {
-  name: string;
-  fetchData: () => Promise<any>;
-  toState: any;
-  loading?: any;
-}
-//
-
 export enum localStoreEnum {
   exerciseItems = "exerciseItems",
   exerciseTypes = "exerciseTypes",
   currentWorkout = "currentWorkout",
   nextWorkout = "nextWorkout",
   latestWorkouts = "latestWorkouts",
-}
-export async function localStore({
-  name,
-  fetchData,
-  toState,
-  loading,
-}: iLocalStore) {
-  if (loading) {
-    loading(true);
-  }
-  let storedData = localStorage.getItem(name);
-  //
-  if (!storedData) {
-    const data = await fetchData();
-    if (toState) {
-      toState(data);
-    }
-    localStorage.setItem(name, JSON.stringify(data));
-    if (loading) {
-      loading(false);
-    }
-  } else {
-    if (loading) {
-      loading(false);
-    }
-
-    if (toState) {
-      toState(JSON.parse(storedData));
-    }
-    const data = await fetchData();
-
-    if (toState) {
-      toState(data);
-    }
-    localStorage.setItem(name, JSON.stringify(data));
-  }
-}
-
-export async function LocalStorageAPI({ name, get }: iLocalStorageAPI) {
-  let storedData = localStorage.getItem(name);
-  if (!storedData || storedData === "undefined") {
-    const data = await get();
-    localStorage.setItem(name, JSON.stringify(data));
-    return data;
-  } else {
-    const asyncStoreUpdate = async () => {
-      const data = await get();
-      localStorage.setItem(name, JSON.stringify(data));
-    };
-    return JSON.parse(storedData);
-  }
 }

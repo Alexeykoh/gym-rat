@@ -24,7 +24,7 @@ export async function GET(req: any) {
   await connectMongoDB();
   //
 
-  const usersResponse: iUser = await UserModel.findOne({ ...par });
+  const usersResponse: iUser = (await UserModel.findOne({ ...par })) as iUser;
   const readyResponse: iUserData = {
     _id: usersResponse?._id || "",
     email: usersResponse?.email || "",

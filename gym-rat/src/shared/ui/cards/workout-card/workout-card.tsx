@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import DateLabel from "../../labels/date-label";
+import IntoLabel from "../../labels/into-label";
 import Icon from "./_UI/_icon";
 import Information from "./_UI/_information";
-import IntoLabel from "../../labels/into-label";
 
 interface iWorkoutCard {
   id: string;
@@ -22,9 +22,9 @@ export default function WorkoutCard({
 }: iWorkoutCard) {
   return (
     <>
-      <Link className="w-full space-y-4" href={`workouts/${id}`}>
+      <Link className="w-full flex flex-col gap-4" href={`workouts/${id}`}>
         <div className="w-full flex gap-4 items-start">
-          <Icon icon={icon} />
+          {/* <Icon icon={icon} /> */}
           <Information title={title} description={description} />
         </div>
         <div className="flex justify-between items-center">

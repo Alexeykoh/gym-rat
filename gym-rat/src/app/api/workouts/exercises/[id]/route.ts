@@ -1,9 +1,7 @@
+import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
+import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
 import connectMongoDB from "@/lib/mongodb";
-import { iExerciseType } from "@/models/ExerciseTypeModel";
-import OrderModel from "@/models/OrderModel";
-import WorkoutExercisesModel, {
-  iWorkoutExercises,
-} from "@/models/WorkoutExercisesModel";
+import WorkoutExercisesModel from "@/models/WorkoutExercisesModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -22,7 +20,6 @@ export async function GET(req: any, { params }: any) {
     //
     await connectMongoDB();
     //
-    let result = [];
     const allExerciseTypes = await WorkoutExercisesModel.find({
       workout_id: params.id,
     });
@@ -50,7 +47,7 @@ export async function PUT(req: any, { params }: any) {
       );
     }
     //
-    const reqParams: iExerciseType = await req.json();
+    const reqParams: iWorkoutExerciseType = await req.json();
     await connectMongoDB(); // connect to BD
     //
     const update = await WorkoutExercisesModel.findOneAndUpdate(
@@ -84,13 +81,6 @@ export async function DELETE(req: any, { params }: any) {
     }
     //
     await connectMongoDB();
-    const { exercise_id } = await WorkoutExercisesModel.findOne({
-      _id: params.id,
-    });
-
-    const deleteBounce = await OrderModel.deleteMany({
-      exercise_id: params.id,
-    });
     await WorkoutExercisesModel.findByIdAndDelete(params.id);
     return NextResponse.json(
       { message: "Exercise was delete" },

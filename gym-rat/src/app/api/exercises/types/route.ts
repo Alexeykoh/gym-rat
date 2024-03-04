@@ -1,5 +1,7 @@
+import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseTypeModel, { iExerciseType } from "@/models/ExerciseTypeModel";
+import ExerciseTypeModel from "@/models/ExerciseTypeModel";
+
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -33,7 +35,7 @@ export async function POST(req: any) {
       );
     }
     //
-    const reqParams: iExerciseType = await req.json();
+    const reqParams: iWorkoutExerciseType = await req.json();
     await connectMongoDB();
     const oldExerciseType = await ExerciseTypeModel.findOne({
       name: reqParams.name,

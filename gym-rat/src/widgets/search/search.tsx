@@ -1,16 +1,16 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { iSearch } from "@/lib/interfaces/Search.interface";
+import { SubmitHandler, useForm } from "react-hook-form";
 import SearchButton from "./_UI/search-button";
-import SearchInput from "./_UI/search-input";
 
 export default function Search() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<any>();
+    // formState: { errors },
+  } = useForm<iSearch>();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<iSearch> = (data) => {
     console.log("onSubmit search", data);
   };
 
@@ -19,7 +19,15 @@ export default function Search() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex items-center max-w-96 w-full self-center bg-zinc-900 rounded-2xl px-4 py-2"
     >
-      <SearchInput placeholder={"Найти тренировку?"} register={register} />
+      <input
+        {...register("value")}
+        type="text"
+        id="simple-search"
+        className=" text-2xl  block w-full ps-2 p-2 bg-transparent placeholder-gray-400 text-white "
+        placeholder={"Найти тренировку?"}
+        required
+      />
+
       <SearchButton />
     </form>
   );

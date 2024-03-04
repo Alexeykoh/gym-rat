@@ -1,9 +1,10 @@
-import { UseFormRegister } from "react-hook-form";
+import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface iSearchInput {
   placeholder: string;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<FieldValues>;
 }
+
 export default function SearchInput({ placeholder, register }: iSearchInput) {
   return (
     <input

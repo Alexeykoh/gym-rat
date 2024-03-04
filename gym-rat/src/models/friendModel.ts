@@ -9,7 +9,7 @@ const FriendSchema: Schema = new Schema({
   friendshipAccepted: { type: Boolean, required: false, default: false },
 });
 //
-const FriendModel: any =
+const FriendModel =
   mongoose.models[modelName] ||
   mongoose.model<iFriend>(modelName, FriendSchema);
 //

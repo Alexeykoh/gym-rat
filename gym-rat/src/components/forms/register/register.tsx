@@ -1,22 +1,12 @@
 "use client";
 
-import { validatePassword } from "@/lib/helpers";
 import ActionButton from "@/shared/ui/buttons/ActionButton";
 import { UserPlus } from "lucide-react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { useState } from "react";
 
-type registrationProps = {};
-interface iUserInfo {
-  name: string;
-  email: string;
-  password: string;
-}
-
-const RegistrationForm: FC<registrationProps> = () => {
-  const router = useRouter();
-  const [busy, setBusy] = useState(false);
+export default function RegistrationForm() {
+  // const router = useRouter();
+  const [busy] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,7 +14,7 @@ const RegistrationForm: FC<registrationProps> = () => {
     name: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [errors] = useState({
     email: "",
     password: "",
     repeatPassword: "",
@@ -40,89 +30,89 @@ const RegistrationForm: FC<registrationProps> = () => {
     });
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    // Validate form data
-    let isValid = true;
-    const newErrors = {
-      email: "",
-      password: "",
-      repeatPassword: "",
-      name: "",
-      registration: "",
-    };
+  // const handleSubmit = async (e: MouseEvent) => {
+  //   e.preventDefault();
+  //   // Validate form data
+  //   let isValid = true;
+  //   const newErrors = {
+  //     email: "",
+  //     password: "",
+  //     repeatPassword: "",
+  //     name: "",
+  //     registration: "",
+  //   };
 
-    if (!formData.email) {
-      isValid = false;
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      isValid = false;
-      newErrors.email = "Email is not valid";
-    }
+  //   if (!formData.email) {
+  //     isValid = false;
+  //     newErrors.email = "Email is required";
+  //   } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+  //     isValid = false;
+  //     newErrors.email = "Email is not valid";
+  //   }
 
-    if (!formData.password) {
-      isValid = false;
-      newErrors.password = "Password is required";
-    }
+  //   if (!formData.password) {
+  //     isValid = false;
+  //     newErrors.password = "Password is required";
+  //   }
 
-    if (!validatePassword(formData.password)) {
-      isValid = false;
-      newErrors.password = "Password does not meet the requirements";
-    }
+  //   if (!validatePassword(formData.password)) {
+  //     isValid = false;
+  //     newErrors.password = "Password does not meet the requirements";
+  //   }
 
-    if (formData.password !== formData.repeatPassword) {
-      isValid = false;
-      newErrors.repeatPassword = "Passwords do not match";
-    }
+  //   if (formData.password !== formData.repeatPassword) {
+  //     isValid = false;
+  //     newErrors.repeatPassword = "Passwords do not match";
+  //   }
 
-    if (!formData.name) {
-      isValid = false;
-      newErrors.name = "Name is required";
-    }
+  //   if (!formData.name) {
+  //     isValid = false;
+  //     newErrors.name = "Name is required";
+  //   }
 
-    if (!isValid) {
-      setErrors(newErrors);
-    } else {
-      // Form is valid, submit data to server
-      setBusy(true);
-      const res = await fetch("/api/auth", {
-        method: "POST",
-        body: JSON.stringify(formData),
-      }).then(async (res: any) => {
-        const { email, password } = formData;
-        switch (res.status) {
-          case 200:
-            res.json();
-            //
-            // auto login
-            const sign = await signIn("credentials", {
-              email,
-              password,
-              redirect: false,
-            }).then(() => {
-              setBusy(false);
-              router.replace("/account");
-            });
-            break;
-          case 409:
-            newErrors.registration = "User already exist";
-            console.log("409");
-            setBusy(false);
-            break;
-          default:
-            break;
-        }
-        if (res.status === 200) {
-        }
-        //
-        setErrors(newErrors);
-      });
-    }
-  };
+  //   if (!isValid) {
+  //     setErrors(newErrors);
+  //   } else {
+  //     // Form is valid, submit data to server
+  //     setBusy(true);
+  //     await fetch("/api/auth", {
+  //       method: "POST",
+  //       body: JSON.stringify(formData),
+  //     }).then(async (res: any) => {
+  //       const { email, password } = formData;
+  //       switch (res.status) {
+  //         case 200:
+  //           res.json();
+  //           //
+  //           // auto login
+  //           await signIn("credentials", {
+  //             email,
+  //             password,
+  //             redirect: false,
+  //           }).then(() => {
+  //             setBusy(false);
+  //             router.replace("/account");
+  //           });
+  //           break;
+  //         case 409:
+  //           newErrors.registration = "User already exist";
+  //           console.log("409");
+  //           setBusy(false);
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //       if (res.status === 200) {
+  //       }
+  //       //
+  //       setErrors(newErrors);
+  //     });
+  //   }
+  // };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      // onSubmit={handleSubmit}
       className="max-w-96 w-full flex flex-col gap-8 p-4"
     >
       <h1 className="text-4xl font-bold flex gap-4 items-center">
@@ -201,6 +191,4 @@ const RegistrationForm: FC<registrationProps> = () => {
       <div className="error text-red-400">{errors.registration}</div>
     </form>
   );
-};
-
-export default RegistrationForm;
+}

@@ -1,6 +1,6 @@
 import CardLayout from "@/components/cardLayout/cardLayout";
-import WorkoutCard from "@/components/workoutCard/workoutCard";
 import { iWorkout } from "@/lib/interfaces/Workouts.interface";
+import WorkoutCard from "@/shared/ui/cards/workout-card/workout-card";
 import { Trophy } from "lucide-react";
 interface iLastWorkoutBento {
   workout: iWorkout | null;

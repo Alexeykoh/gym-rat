@@ -8,7 +8,7 @@ const exerciseTypeSchema: Schema = new Schema({
   description: { type: String },
 });
 //
-const ExerciseTypeModel: any =
+const ExerciseTypeModel =
   mongoose.models[modelName] ||
   mongoose.model<iWorkoutExerciseType>(modelName, exerciseTypeSchema);
 //

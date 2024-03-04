@@ -1,11 +1,8 @@
-import icon from "../../../public/icons/gym-rat-icon.png";
+import icon from "../../../../public/icons/gym-rat-icon.png";
 
 import Image from "next/image";
-import { FC } from "react";
 
-type logoProps = {};
-
-const Logo: FC<logoProps> = () => {
+export default function Logo() {
   return (
     <>
       <div className="logo flex items-center justify-center w-fit gap-4">
@@ -20,6 +17,4 @@ const Logo: FC<logoProps> = () => {
       </div>
     </>
   );
-};
-
-export default Logo;
+}

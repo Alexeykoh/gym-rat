@@ -1,15 +1,18 @@
-import { iWorkout } from "@/lib/interfaces/Workouts.interface";
+import {
+  iWorkout,
+  iWorkoutResponse,
+} from "@/lib/interfaces/Workouts.interface";
 import connectMongoDB from "@/lib/mongodb";
-import OrderModel from "@/models/OrderModel";
 import UserModel from "@/models/UserModel";
-import WorkoutExercisesModel from "@/models/WorkoutExercisesModel";
 import WorkoutModel from "@/models/WorkoutModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 const getSwitch: any = {
   all: async () => {
-    const result = await WorkoutModel.find({}).sort({ date: -1 }) as iWorkout[];
+    const result = (await WorkoutModel.find({}).sort({
+      date: -1,
+    })) as iWorkout[];
     return result;
   },
   latest: async (id: string) => {
@@ -93,52 +96,30 @@ export async function GET(req: any, res: any) {
     email: session?.user?.email,
   });
   const id = userData._id.toString();
-  const type = req.nextUrl.searchParams.get("type");
-  const page = req.nextUrl.searchParams.get("page");
+  const type = req.nextUrl.searchParams.get("type") as string;
+  const page = req.nextUrl.searchParams.get("page") as number;
   if (type) {
     const getResult = await getSwitch[type](id);
     return NextResponse.json(getResult, { status: 200 });
   }
   if (page) {
-    const storeObject = {
-      exercises: [],
-      workouts: [],
-      orders: [],
-    };
-    //
-    const perPage = 4;
+    const perPage = 6;
     const today = new Date(Date.now());
-    const pageReq = req.nextUrl.searchParams.get("page");
+    const pageReq = req.nextUrl.searchParams.get("page") as number;
     const skip = (pageReq - 1) * perPage;
     const totalItems = await WorkoutModel.countDocuments();
-    const workouts = await WorkoutModel.find({
+    const workouts: iWorkout[] = await WorkoutModel.find({
       user_id: id,
       date: { $lt: today },
     })
       .sort({ date: -1 })
       .skip(skip)
       .limit(perPage);
-    storeObject.workouts = workouts;
-    //
-    const itemsID = workouts.map((el: any) => el._id.toString());
-    const exercises = await WorkoutExercisesModel.find({
-      workout_id: { $in: itemsID },
-    });
-    storeObject.exercises = exercises;
-    //
-    const exercisesId = exercises.map((el: any) => el._id.toString());
-    const orders = await OrderModel.find({
-      exercise_id: { $in: exercisesId },
-    });
-    storeObject.orders = orders;
-    //
-    return NextResponse.json(
-      {
-        storeObject,
-        currentPage: page,
-        totalPages: Math.ceil(totalItems / perPage),
-      },
-      { status: 200 }
-    );
+    const currentResp: iWorkoutResponse = {
+      workouts: workouts,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalItems / perPage),
+    };
+    return NextResponse.json(currentResp, { status: 200 });
   }
 }

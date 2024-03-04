@@ -1,6 +1,6 @@
+import { iExercise } from "@/lib/interfaces/Exercise.interface";
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseModel, { iExercise } from "@/models/ExerciseModel";
-import UserModel from "@/models/UserModel";
+import ExerciseModel from "@/models/ExerciseModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -19,9 +19,6 @@ export async function GET(req: any, res: any) {
   // get all exercises
   //
   const session: any = await getServerSession(req);
-  const userData = await UserModel.findOne({
-    email: session?.user?.email,
-  });
   //
   const typeIdParam = req.nextUrl.searchParams.get("type_id");
   //

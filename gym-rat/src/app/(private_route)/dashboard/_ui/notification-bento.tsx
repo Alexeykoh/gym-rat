@@ -18,11 +18,11 @@ export default function NotificationBento({
       {notification.length ? (
         <div className="absolute -top-2 -right-4">
           <TextBadge
-            value={notification.length + 1}
+            value={(notification.length + 1).toString()}
             type={enumTextBadge.Error}
           />
         </div>
       ) : null}
     </div>
-  ); 
+  );
 }

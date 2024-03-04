@@ -1,9 +1,6 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { FC } from "react";
-//
-
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import infoIcon from "../../../../public/icons/Info.svg";
@@ -12,14 +9,16 @@ import privacyIcon from "../../../../public/icons/Privacy.svg";
 import mainIcon from "../../../../public/icons/gym-rat-icon.png";
 import userIcon from "../../../../public/icons/userInfo.svg";
 //
-type pageProps = {};
+interface UserData {
+  name?: string | null;
+  email?: string | null;
+  role?: string | null; // Add the role property here
+  // Add any other properties you expect to receive
+}
 
-const Account: FC<pageProps> = () => {
-  //
-  const { data, status }: any = useSession();
-  const name = data?.user?.name;
-  const email = data?.user?.email;
-  const role = data?.user?.role;
+export default function Account() {
+  const { data } = useSession();
+  const { name, email, role }: UserData = data?.user || {};
   //
   return (
     <>
@@ -71,6 +70,4 @@ const Account: FC<pageProps> = () => {
       </div>
     </>
   );
-};
-
-export default Account;
+}

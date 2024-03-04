@@ -14,7 +14,7 @@ export const UserService = {
     });
     return loinResponse;
   },
-  getUserByEmail: async (email: string): Promise<iUserData | null> => {
+  async getUserByEmail(email: string) {
     try {
       const response: AxiosResponse<iUserData> = await axios.get(
         `/api/users/one?email=${email}`
