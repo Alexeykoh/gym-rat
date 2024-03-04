@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export function validatePassword(password: string) {
   const lengthRegex = /.{8,}/; // Ensures minimum length of 8 characters
   const uppercaseRegex = /[A-Z]/; // Ensures at least one uppercase letter
@@ -32,4 +34,16 @@ export enum localStoreEnum {
   currentWorkout = "currentWorkout",
   nextWorkout = "nextWorkout",
   latestWorkouts = "latestWorkouts",
+}
+
+interface iErrorHandler {
+  error: string;
+  code: number;
+}
+export function errorHandler(error: AxiosError<{ error: string }>) {
+  const resp: iErrorHandler = {
+    error: error?.response?.data?.error as string,
+    code: error?.response?.status as number,
+  };
+  return resp
 }

@@ -1,5 +1,6 @@
 import AuthProvider from "@/components/AuthProvider/AuthProvider";
 import LayoutLoading from "@/components/ui/skeletons/LayoutLoading";
+import UserProvider from "@/lib/context/user-context";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
@@ -17,11 +18,13 @@ export default function RootLayout({
   //
   return (
     <AuthProvider>
-      <html lang="en">
-        <body className={"text-white bg-zinc-800"}>
-          <Suspense fallback={<LayoutLoading />}>{children}</Suspense>
-        </body>
-      </html>
+      <UserProvider>
+        <html lang="en">
+          <body className={"text-white bg-zinc-800"}>
+            <Suspense fallback={<LayoutLoading />}>{children}</Suspense>
+          </body>
+        </html>
+      </UserProvider>
     </AuthProvider>
   );
 }

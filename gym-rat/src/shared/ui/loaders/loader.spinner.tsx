@@ -1,10 +1,10 @@
 import { Loader } from "lucide-react";
 
 interface iLoaderSpinner {
-  size: number;
+  size?: number;
 }
 
-export default function LoaderSpinner({ size }: iLoaderSpinner) {
+export default function LoaderSpinner({ size = 24 }: iLoaderSpinner) {
   return (
     <span className="w-full h-full flex items-center justify-center">
       <span className="animate-spin">

@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, ReactNode } from "react";
+import LoaderSpinner from "../loaders/loader.spinner";
 
 type ActionButtonProps = {
   busy?: boolean;
@@ -15,7 +16,7 @@ const ActionButton: FC<ActionButtonProps> = ({
   action,
   text,
   type,
-  color = "bg-zinc-700",
+  color = "bg-zinc-800",
 }) => {
   return (
     <>
@@ -28,7 +29,11 @@ const ActionButton: FC<ActionButtonProps> = ({
         type={type || "submit"}
         className={color + " p-4 rounded-2xl w-full h-15 flex justify-center"}
       >
-        <p className="text-2xl font-semibold">{text}</p>
+        {busy ? (
+          <LoaderSpinner />
+        ) : (
+          <p className="text-2xl font-semibold">{text}</p>
+        )}
       </button>
     </>
   );

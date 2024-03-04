@@ -31,10 +31,7 @@ const AdditionalButton: FC<ActionButtonProps> = ({
         type={type || "submit"}
         className={
           (!isVisible && " hidden ") +
-          (busy
-            ? " bg-zinc-500 lg:hover:bg-zinc-400 "
-            : " bg-blue-700 lg:hover:bg-zinc-700 ") +
-          " p-3 mt-4 rounded-xl text-xl text-black flex items-center w-full justify-center"
+          " p-3 mt-4 rounded-xl text-xl text-black flex items-center w-full justify-center bg-zinc-800"
         }
       >
         {!busy ? (

@@ -1,10 +1,9 @@
 "use client";
-import Header from "@/entities/header/header";
+import Footer from "@/entities/footer/footer";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ReactNode, Suspense } from "react";
 import Loading from "./loading";
-import Footer from "@/entities/footer/footer";
 
 type layoutProps = {
   children: ReactNode | string;

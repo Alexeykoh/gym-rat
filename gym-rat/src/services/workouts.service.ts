@@ -33,4 +33,12 @@ export const WorkoutService = {
     const data = response.data;
     return data;
   },
+  async postWorkout(workout: iWorkout) {
+    const response: AxiosResponse<iWorkout> = await axios.post(
+      "/api/workouts/items",
+      workout
+    );
+    const data = response.data;
+    return data;
+  },
 };

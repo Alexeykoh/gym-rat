@@ -2,7 +2,7 @@ import { WorkoutService } from "@/services/workouts.service";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export function useLoadMoreWorkouts() {
-  const { data, isLoading, error, fetchNextPage } = useInfiniteQuery({
+  const { data, isLoading, error, fetchNextPage, refetch } = useInfiniteQuery({
     queryKey: ["useLoadMoreWorkouts"],
     queryFn: WorkoutService.getByPage,
     initialPageParam: 1,
@@ -12,5 +12,5 @@ export function useLoadMoreWorkouts() {
     },
   });
   const isNextPage = !!data?.pages[data.pageParams.length - 1].length;
-  return { data, isNextPage, isLoading, error, fetchNextPage };
+  return { data, isNextPage, isLoading, error, fetchNextPage, refetch };
 }

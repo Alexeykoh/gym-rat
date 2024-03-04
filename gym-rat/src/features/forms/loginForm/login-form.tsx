@@ -1,5 +1,5 @@
 "use client";
-import useLoginAuthorization from "@/features/useLoginAuthorization";
+import useLoginAuthorization from "@/features/forms/loginForm/_useLoginAuthorization";
 import { iUserService } from "@/lib/interfaces/UserService.interface";
 import ActionButton from "@/shared/ui/buttons/ActionButton";
 import React from "react";

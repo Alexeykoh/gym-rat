@@ -53,24 +53,24 @@ const getSwitch: any = {
   },
 };
 export async function POST(req: any) {
-  // create new workout
-  //
   try {
     const session = await getServerSession(req);
-    // Check if the user is authenticated
     if (!session) {
       return NextResponse.json(
         { error: "User is not authenticated" },
         { status: 401 }
       );
     }
-    //
     const reqParams: iWorkout = await req.json(); // get params from request
     await connectMongoDB(); // connect to BD
+    const user = await UserModel.findById(reqParams.user_id);
+    if (!user) {
+      throw new Error("Пользователь не найден");
+    }
     //
     await WorkoutModel.create({ ...reqParams }); // create new user
     return NextResponse.json(
-      { message: "User Created", params: reqParams },
+      { message: "Workout Created", params: reqParams },
       { status: 200 }
     );
   } catch (error: any) {

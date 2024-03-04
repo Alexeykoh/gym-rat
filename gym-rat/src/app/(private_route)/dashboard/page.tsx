@@ -6,14 +6,16 @@ import { enumUserRole, iUserData } from "@/lib/interfaces/User.interface";
 import { iWorkout } from "@/lib/interfaces/Workouts.interface";
 import { UserService } from "@/services/user.service";
 import LoaderSpinnerScreen from "@/shared/ui/loaders/loader.spinner.screen";
+import FloatModal from "@/widgets/modals/floatModal/float-modal";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import DateBento from "./_ui/date-bento";
-import FriendsBento from "./_ui/friends-bento";
-import LastWorkoutBento from "./_ui/last-workout-bento";
-import NotificationBento from "./_ui/notification-bento";
-import UserBento from "./_ui/user-bento";
+import AdminLink from "./_ui/_admin-link";
+import DateBento from "./_ui/_date-bento";
+import FriendsBento from "./_ui/_friends-bento";
+import LastWorkoutBento from "./_ui/_last-workout-bento";
+import NotificationBento from "./_ui/_notification-bento";
+import UserBento from "./_ui/_user-bento";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -32,12 +34,12 @@ export default function Dashboard() {
   return (
     <main className="flex flex-col gap-8">
       <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 [&>*]:rounded-2xl ">
+        <UserBento
+          name={data?.name as string}
+          role={data?.role as enumUserRole}
+        />
         <DateBento />
         <div className="col-span-1 gap-4 items-center grid grid-cols-1 h-full">
-          <UserBento
-            name={data?.name as string}
-            role={data?.role as enumUserRole}
-          />
           <NotificationBento notification={notification} />
         </div>
         <div className="col-span-3 lg:col-span-2">
@@ -47,6 +49,7 @@ export default function Dashboard() {
           <LastWorkoutBento workout={latestWorkout} />
         </div>
       </div>
+      <AdminLink isAdmin={data?.role === "admin"} />
     </main>
   );
 }
