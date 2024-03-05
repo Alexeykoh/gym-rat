@@ -1,5 +1,5 @@
 "use client";
-import { UserService } from "@/services/user.service";
+import { UserEndpoints } from "@/features/endpoints/user.endpoints";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { createContext } from "react";
@@ -23,7 +23,7 @@ export default function UserProvider({
     queryKey: ["UserService.getUserByEmail"],
     enabled: status !== "loading",
     queryFn: async () =>
-      await UserService.getUserByEmail(session?.user?.email as string),
+      await UserEndpoints.getUserByEmail(session?.user?.email as string),
   });
 
   const sharedState: MyContextType = {

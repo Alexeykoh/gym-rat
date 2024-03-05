@@ -3,7 +3,7 @@ import { iUserService } from "@/lib/interfaces/UserService.interface";
 import axios, { AxiosResponse } from "axios";
 import { signIn } from "next-auth/react";
 
-export const UserService = {
+export const UserEndpoints = {
   login: async ({ email, password }: iUserService) => {
     const loinResponse = await signIn("credentials", {
       email,

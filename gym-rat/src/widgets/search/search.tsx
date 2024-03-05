@@ -23,7 +23,7 @@ export default function Search() {
         {...register("value")}
         type="text"
         id="simple-search"
-        className=" text-2xl  block w-full ps-2 p-2 bg-transparent placeholder-gray-400 text-white "
+        className=" text-2xl placeholder-rose-200/50 block w-full ps-2 p-2 bg-transparent text-white "
         placeholder={"Найти тренировку?"}
         required
       />

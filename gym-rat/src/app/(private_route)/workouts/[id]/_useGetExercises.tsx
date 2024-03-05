@@ -1,5 +1,5 @@
+import { ExercisesService } from "@/features/services/exercises.services";
 import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
-import { ExercisesService } from "@/services/exercises.services";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useGetExercises(workoutId: string, enable: boolean) {

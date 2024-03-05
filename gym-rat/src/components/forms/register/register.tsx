@@ -187,7 +187,11 @@ export default function RegistrationForm() {
         />
         <div className="error text-red-400">{errors.repeatPassword}</div>
       </div>
-      <ActionButton text={"Register"} busy={busy} />
+      <ActionButton
+        text={"Register"}
+        busy={busy}
+        color="bg-rose-400 text-black"
+      />
       <div className="error text-red-400">{errors.registration}</div>
     </form>
   );

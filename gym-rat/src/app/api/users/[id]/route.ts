@@ -1,5 +1,5 @@
+import UserModel from "@/features/models/userModel";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/UserModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

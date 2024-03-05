@@ -23,12 +23,12 @@ export default function FloatModal({
       onClick={handleBackdropClick}
       className={
         (isOpen ? "" : " translate-x-full opacity-0 ") +
-        " duration-150 box-border fixed top-0 left-0 w-full h-screen z-40 flex justify-end items-end py-4 px-4 shadow-lg backdrop-blur-sm"
+        " duration-150 box-border fixed top-0 left-0 w-full h-full z-40 flex justify-end items-center py-4 px-4 shadow-lg backdrop-blur-sm"
       }
     >
       <div
         className={
-          "bg-zinc-700 w-full rounded-2xl shadow-lg z-50 flex flex-col bottom-24 p-4 h-fit duration-300"
+          "bg-zinc-700 w-full rounded-2xl shadow-lg z-50 flex flex-col p-4 h-fit duration-300"
         }
       >
         <X size={24} className={"self-end text-red-400"} onClick={closeModal} />

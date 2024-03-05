@@ -8,7 +8,7 @@ interface iUserBento {
 
 export default function UserBento({ name, role }: iUserBento) {
   return (
-    <div className="col-span-3 bg-zinc-900 text-white rounded-2xl flex items-center text-md font-semibold p-4 h-full gap-4">
+    <div className="col-span-3 bg-zinc-900 text-white rounded-2xl flex items-center text-md font-semibold h-full w-full gap-4">
       <div className="self-start p-4 bg-zinc-800 rounded-2xl">
         <CircleUser />
       </div>

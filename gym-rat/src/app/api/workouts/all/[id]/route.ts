@@ -1,5 +1,5 @@
+import WorkoutModel from "@/features/models/WorkoutModel";
 import connectMongoDB from "@/lib/mongodb";
-import WorkoutModel from "@/models/WorkoutModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

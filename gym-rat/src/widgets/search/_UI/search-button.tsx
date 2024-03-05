@@ -6,7 +6,7 @@ export default function SearchButton() {
       type="submit"
       className="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 "
     >
-      <Search />
+      <Search className="text-rose-400" />
     </button>
   );
 }

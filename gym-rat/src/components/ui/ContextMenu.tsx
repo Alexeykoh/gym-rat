@@ -36,7 +36,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ data }) => {
           ref={menuRef}
           className={
             (context ? " flex " : " hidden ") +
-            " flex-col absolute top-0 right-0  rounded-xl shadow-md w-max z-40 overflow-hidden  bg-gray-400"
+            " flex-col absolute top-0 right-0  rounded-xl shadow-lg w-max z-40 overflow-hidden  bg-zinc-700"
           }
         >
           {!data
@@ -51,7 +51,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ data }) => {
                     }}
                     className="hover:bg-gray-300 hover:text-black flex gap-2 items-center justify-start w-full py-2 px-4  "
                   >
-                    {el.icon as string}
+                    <span className="text-xl"> {el.icon as string}</span>
                     <p className="text-xl">{el.name}</p>
                   </li>
                 );

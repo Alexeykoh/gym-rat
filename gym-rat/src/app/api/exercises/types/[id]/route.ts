@@ -1,6 +1,6 @@
+import ExerciseTypeModel from "@/features/models/ExerciseTypeModel";
 import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseTypeModel from "@/models/ExerciseTypeModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

@@ -1,12 +1,16 @@
 "use client";
-
+import { UserEndpoints } from "@/features/endpoints/user.endpoints";
 import { iFriend } from "@/lib/interfaces/Friends.interface";
 import { iNotification } from "@/lib/interfaces/Notification.interface";
 import { enumUserRole, iUserData } from "@/lib/interfaces/User.interface";
 import { iWorkout } from "@/lib/interfaces/Workouts.interface";
-import { UserService } from "@/services/user.service";
+import BentoBox from "@/shared/ui/bento-grid/bento-box";
+import BentoCell from "@/shared/ui/bento-grid/bento-cell";
+import {
+  enumBentoCellHeight,
+  enumBentoCellWidth,
+} from "@/shared/ui/bento-grid/bento.interface";
 import LoaderSpinnerScreen from "@/shared/ui/loaders/loader.spinner.screen";
-import FloatModal from "@/widgets/modals/floatModal/float-modal";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -23,7 +27,7 @@ export default function Dashboard() {
     queryKey: ["UserService.getUserByEmail"],
     enabled: status !== "loading",
     queryFn: async () =>
-      await UserService.getUserByEmail(session?.user?.email as string),
+      await UserEndpoints.getUserByEmail(session?.user?.email as string),
   });
   const [friends] = useState<iFriend[]>([]);
   const [notification] = useState<iNotification[]>([]);
@@ -33,22 +37,36 @@ export default function Dashboard() {
   }
   return (
     <main className="flex flex-col gap-8">
-      <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 [&>*]:rounded-2xl ">
-        <UserBento
-          name={data?.name as string}
-          role={data?.role as enumUserRole}
-        />
-        <DateBento />
-        <div className="col-span-1 gap-4 items-center grid grid-cols-1 h-full">
+      <BentoBox>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w3, h: enumBentoCellHeight.h1 }}
+        >
+          <UserBento
+            name={data?.name as string}
+            role={data?.role as enumUserRole}
+          />
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w2, h: enumBentoCellHeight.h1 }}
+        >
+          <DateBento />
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w1, h: enumBentoCellHeight.h1 }}
+        >
           <NotificationBento notification={notification} />
-        </div>
-        <div className="col-span-3 lg:col-span-2">
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w3, h: enumBentoCellHeight.h1 }}
+        >
           <FriendsBento friends={friends} />
-        </div>
-        <div className="col-span-3 lg:col-span-2 flex justify-between gap-4">
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w3, h: enumBentoCellHeight.h1 }}
+        >
           <LastWorkoutBento workout={latestWorkout} />
-        </div>
-      </div>
+        </BentoCell>
+      </BentoBox>
       <AdminLink isAdmin={data?.role === "admin"} />
     </main>
   );

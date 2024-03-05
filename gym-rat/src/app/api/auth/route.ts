@@ -1,6 +1,6 @@
+import UserModel from "@/features/models/UserModel";
 import { iUserData } from "@/lib/interfaces/User.interface";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/UserModel";
 
 import { NextResponse } from "next/server";
 

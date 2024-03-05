@@ -61,7 +61,7 @@ const LoginForm: React.FC = () => {
         )}
       </div>
 
-      <ActionButton text={"Войти"} busy={loading} />
+      <ActionButton text={"Войти"} busy={loading} color="bg-lime-400 text-black" />
       {error && <span className="text-red-400">{error}</span>}
     </form>
   );

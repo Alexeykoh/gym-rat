@@ -1,5 +1,5 @@
+import OrderModel from "@/features/models/OrderModel";
 import connectMongoDB from "@/lib/mongodb";
-import OrderModel from "@/models/OrderModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

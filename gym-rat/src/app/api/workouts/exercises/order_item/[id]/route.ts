@@ -1,6 +1,6 @@
+import OrderModel from "@/features/models/OrderModel";
 import { iExerciseOrder } from "@/lib/interfaces/ExerciseOrder.interface";
 import connectMongoDB from "@/lib/mongodb";
-import OrderModel from "@/models/OrderModel";
 
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";

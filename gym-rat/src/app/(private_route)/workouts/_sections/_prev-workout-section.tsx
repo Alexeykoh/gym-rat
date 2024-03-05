@@ -11,7 +11,7 @@ import ActionButton from "@/shared/ui/buttons/ActionButton";
 import useModal from "@/widgets/modals/floatModal/_useModal";
 
 export default function PrevWorkoutSection() {
-  const { data, isNextPage, fetchNextPage, refetch } = useLoadMoreWorkouts();
+  const { data, isNextPage, fetchNextPage } = useLoadMoreWorkouts();
   const triggerRef = useRef(null);
   const isVisible = useIntersection({
     element: triggerRef,

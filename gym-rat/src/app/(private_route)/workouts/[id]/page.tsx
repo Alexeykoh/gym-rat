@@ -4,14 +4,19 @@ import ContextMenu from "@/components/ui/ContextMenu";
 import PreLoader from "@/components/ui/PreLoader";
 import WorkoutExercise from "@/components/ui/WorkoutExercise";
 import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
-import ActionButton from "@/shared/ui/buttons/ActionButton";
-import BackButton from "@/shared/ui/buttons/BackButton";
 import axios from "axios";
-import { Plus, Settings, SquarePen, Trash2 } from "lucide-react";
+import { Settings, SquarePen, Trash2, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import BentoBox from "@/shared/ui/bento-grid/bento-box";
+import BentoCell from "@/shared/ui/bento-grid/bento-cell";
+import {
+  enumBentoCellHeight,
+  enumBentoCellWidth,
+} from "@/shared/ui/bento-grid/bento.interface";
 import { FC, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import NavWorkout from "./_UI/_navWorkout";
 import Title from "./_UI/_title";
 import useGetWorkoutById from "./_useGetWorkoutById";
 
@@ -25,6 +30,7 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   const [exercises, setExercises] = useState<iWorkoutExercises[]>([]);
   //
   const router = useRouter();
+
   //
 
   function handleOnDragEnd(result: any) {
@@ -57,33 +63,47 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
   }
   return (
     <div className="flex flex-col gap-4 w-full pb-64">
-      
-      <div className="flex flex-row justify-between items-center lg:w-fit">
-        <Title
-          name={workoutData?.name as string}
-          date={workoutData?.date as string}
-        />
-        <ContextMenu
-          icon={<Settings />}
-          data={[
-            {
-              name: "Переименовать",
-              icon: <SquarePen />,
-              action: () => {
-                // updateType(el);
-              },
-            },
-            {
-              name: "Удалить",
-              icon: <Trash2 />,
-              action: () => {
-                // removeWorkout(params.id);
-              },
-            },
-          ]}
-        />
-      </div>
-      <p className="text-md text-gray-400">{workoutData?.description}</p>
+      <BentoBox>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w3, h: enumBentoCellHeight.h1 }}
+        >
+          <NavWorkout date={workoutData?.date as string}>
+            <ContextMenu
+              icon={<Settings />}
+              data={[
+                {
+                  name: "Переименовать",
+                  icon: <SquarePen className="text-orange-400" />,
+                  action: () => {
+                    // updateType(el);
+                  },
+                },
+                {
+                  name: "Удалить",
+                  icon: <Trash2 className="text-red-400" />,
+                  action: () => {
+                    // removeWorkout(params.id);
+                  },
+                },
+              ]}
+            />
+          </NavWorkout>
+        </BentoCell>
+        <BentoCell
+          size={{
+            w: enumBentoCellWidth.w2,
+            h: enumBentoCellHeight.h1,
+          }}
+        >
+          <Title name={workoutData?.name as string} />
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w1, h: enumBentoCellHeight.h1 }}
+        >
+          <Users />
+        </BentoCell>
+      </BentoBox>
+
       {!exercises && <PreLoader />}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="characters" type="column" direction="vertical">

@@ -7,8 +7,9 @@ const modelName = "workout";
 const workoutSchema: Schema = new Schema({
   user_id: { type: String, required: true },
   date: { type: Date, default: Date.now },
-  name: { type: String, required: false },
-  description: { type: String, required: false },
+  dateCreate: { type: Date, default: Date.now },
+  name: { type: String },
+  description: { type: String },
 });
 //
 workoutSchema.methods.comparePassword = async function (password: string) {

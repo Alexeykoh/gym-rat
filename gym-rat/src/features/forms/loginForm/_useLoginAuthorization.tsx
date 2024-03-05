@@ -1,6 +1,6 @@
 "use client";
+import { UserEndpoints } from "@/features/endpoints/user.endpoints";
 import { iUserService } from "@/lib/interfaces/UserService.interface";
-import { UserService } from "@/services/user.service";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 //
@@ -13,7 +13,7 @@ export default function useLoginAuthorization() {
   //
   async function loginIn({ email, password }: iUserService) {
     setLoading(true);
-    const loginUser = await UserService.login({
+    const loginUser = await UserEndpoints.login({
       email: email,
       password: password,
     });
