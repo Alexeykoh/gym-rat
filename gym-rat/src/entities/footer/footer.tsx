@@ -1,9 +1,9 @@
 import MainNav from "../navigation/main-nav";
 
-export default function Header() {
+export default function Footer() {
   return (
-    <header className="flex flex-col lg:flex-row items-center box-border justify-center gap-4 my-4 fixed bottom-0 left-0 z-30 w-full px-4">
+    <footer className="">
       <MainNav />
-    </header>
+    </footer>
   );
 }

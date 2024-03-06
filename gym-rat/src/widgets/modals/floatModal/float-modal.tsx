@@ -23,7 +23,7 @@ export default function FloatModal({
       onClick={handleBackdropClick}
       className={
         (isOpen ? "" : " translate-x-full opacity-0 ") +
-        " duration-150 box-border fixed top-0 left-0 w-full h-full z-40 flex justify-end items-center py-4 px-4 shadow-lg backdrop-blur-sm"
+        " duration-150 box-border fixed top-0 left-0 w-full h-full z-50 flex justify-end items-center py-4 px-4 shadow-lg backdrop-blur-sm"
       }
     >
       <div

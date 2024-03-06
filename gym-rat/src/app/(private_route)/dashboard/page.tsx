@@ -14,7 +14,6 @@ import LoaderSpinnerScreen from "@/shared/ui/loaders/loader.spinner.screen";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import AdminLink from "./_ui/_admin-link";
 import DateBento from "./_ui/_date-bento";
 import FriendsBento from "./_ui/_friends-bento";
 import LastWorkoutBento from "./_ui/_last-workout-bento";
@@ -35,6 +34,10 @@ export default function Dashboard() {
   if (status === "loading" || isLoading) {
     return <LoaderSpinnerScreen />;
   }
+  //
+  // console.log("optionalButton", optionalButton);
+  // setOptionalButton(<AdminLink isAdmin={data?.role === "admin"} />);
+  //
   return (
     <main className="flex flex-col gap-8">
       <BentoBox>
@@ -67,7 +70,6 @@ export default function Dashboard() {
           <LastWorkoutBento workout={latestWorkout} />
         </BentoCell>
       </BentoBox>
-      <AdminLink isAdmin={data?.role === "admin"} />
     </main>
   );
 }

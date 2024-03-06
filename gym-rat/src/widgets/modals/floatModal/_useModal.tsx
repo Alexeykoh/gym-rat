@@ -8,6 +8,7 @@ interface iUseModal {
 export default function useModal({ children }: iUseModal) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   function openModal() {
+
     setIsOpen(true);
   }
   function closeModal() {
