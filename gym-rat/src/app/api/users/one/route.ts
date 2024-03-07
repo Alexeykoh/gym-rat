@@ -1,4 +1,4 @@
-import UserModel from "@/features/models/UserModel";
+import UserModel from "@/features/models/userModel";
 import { iUser, iUserData } from "@/lib/interfaces/User.interface";
 import connectMongoDB from "@/lib/mongodb";
 import { getServerSession } from "next-auth";

@@ -1,4 +1,4 @@
-import WorkoutModel from "@/features/models/WorkoutModel";
+import WorkoutModel from "@/features/models/workoutModel";
 import connectMongoDB from "@/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";

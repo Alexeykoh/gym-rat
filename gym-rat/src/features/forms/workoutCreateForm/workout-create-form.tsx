@@ -53,13 +53,13 @@ export default function WorkoutCreateForm({}: iWorkoutCreateForm) {
           {...register("date")}
         />
         {errors.date && (
-          <span className="text-red-400">{errors.date.message}</span>
+          <span className="text-red-500">{errors.date.message}</span>
         )}
       </div>
       <ActionButton
         busy={reqLoad}
         text={"Добавить"}
-        color=" bg-zinc-800 text-rose-400 "
+        color=" bg-zinc-800 text--400 "
         type="submit"
       />
       {error && <span className="text-red-400">{error}</span>}

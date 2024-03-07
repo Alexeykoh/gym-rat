@@ -5,6 +5,7 @@ import {
 import axios, { AxiosResponse } from "axios";
 
 export const WorkoutEndpoints = {
+  // GET
   async getAllById(userID: string) {
     const response: AxiosResponse<iWorkout[]> = await axios.get(
       "/api/workouts/all/" + userID
@@ -33,10 +34,28 @@ export const WorkoutEndpoints = {
     const data = response.data;
     return data;
   },
+  async find(value: string) {
+    const response: AxiosResponse<iWorkout[]> = await axios.get(
+      `/api/workouts/find?search=${value}`
+    );
+    const data = response.data;
+    return data;
+  },
+
+  // POST
   async postWorkout(workout: iWorkout) {
     const response: AxiosResponse<iWorkout> = await axios.post(
       "/api/workouts/items",
       workout
+    );
+    const data = response.data;
+    return data;
+  },
+
+  // DELETE
+  async deleteWorkout(workoutId: string) {
+    const response: AxiosResponse<iWorkout> = await axios.delete(
+      "/api/workouts/items/" + workoutId
     );
     const data = response.data;
     return data;

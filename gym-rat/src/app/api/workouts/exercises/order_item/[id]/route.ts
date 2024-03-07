@@ -1,4 +1,4 @@
-import OrderModel from "@/features/models/OrderModel";
+import OrderModel from "@/features/models/orderModel";
 import { iExerciseOrder } from "@/lib/interfaces/ExerciseOrder.interface";
 import connectMongoDB from "@/lib/mongodb";
 

@@ -19,8 +19,10 @@ import FriendsBento from "./_ui/_friends-bento";
 import LastWorkoutBento from "./_ui/_last-workout-bento";
 import NotificationBento from "./_ui/_notification-bento";
 import UserBento from "./_ui/_user-bento";
+import { useNavContext } from "@/lib/context/nav-context";
 
 export default function Dashboard() {
+  const {} = useNavContext("dashboard");
   const { data: session, status } = useSession();
   const { data, isLoading } = useQuery<iUserData | null>({
     queryKey: ["UserService.getUserByEmail"],
@@ -34,9 +36,6 @@ export default function Dashboard() {
   if (status === "loading" || isLoading) {
     return <LoaderSpinnerScreen />;
   }
-  //
-  // console.log("optionalButton", optionalButton);
-  // setOptionalButton(<AdminLink isAdmin={data?.role === "admin"} />);
   //
   return (
     <main className="flex flex-col gap-8">

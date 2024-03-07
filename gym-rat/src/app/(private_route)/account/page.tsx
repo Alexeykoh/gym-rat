@@ -1,4 +1,5 @@
 "use client";
+import { useNavContext } from "@/lib/context/nav-context";
 import BentoBox from "@/shared/ui/bento-grid/bento-box";
 import BentoCell from "@/shared/ui/bento-grid/bento-cell";
 import {
@@ -6,19 +7,10 @@ import {
   enumBentoCellWidth,
 } from "@/shared/ui/bento-grid/bento.interface";
 import { Gauge, PersonStanding } from "lucide-react";
-import { useSession } from "next-auth/react";
 //
-interface UserData {
-  name?: string | null;
-  email?: string | null;
-  role?: string | null; // Add the role property here
-  // Add any other properties you expect to receive
-}
 
 export default function Account() {
-  const { data } = useSession();
-  // const { name, email, role }: UserData = data?.user || {};
-  //
+  const {} = useNavContext("account");
   return (
     <>
       <BentoBox>

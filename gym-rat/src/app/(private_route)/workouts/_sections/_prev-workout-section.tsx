@@ -1,8 +1,8 @@
+"use client";
 import CardLayout from "@/components/cardLayout/cardLayout";
 import { useIntersection } from "@/lib/hooks/useIntersection";
 import AdditionalButton from "@/shared/ui/buttons/AdditionalButton";
 import WorkoutCard from "@/shared/ui/cards/workout-card/workout-card";
-import { Medal } from "lucide-react";
 import { useEffect, useRef } from "react";
 import Title from "../_IU/_title";
 import { useLoadMoreWorkouts } from "../_useLoadMoreWorkouts";
@@ -14,12 +14,12 @@ export default function PrevWorkoutSection() {
     element: triggerRef,
     rootMargin: "0px",
   });
-
   useEffect(() => {
     if (isVisible) {
       fetchNextPage();
     }
-  }, [data, isVisible]);
+  }, [data, isVisible, fetchNextPage]);
+
   return (
     <>
       <section className="flex flex-col gap-4">
@@ -30,7 +30,6 @@ export default function PrevWorkoutSection() {
             return (
               <CardLayout key={ind}>
                 <WorkoutCard
-                  icon={<Medal />}
                   title={name}
                   description={description}
                   date={date}

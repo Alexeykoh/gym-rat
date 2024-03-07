@@ -9,7 +9,7 @@ interface iAdminLink {
 export default function AdminLink({ isAdmin }: iAdminLink) {
   return (
     <Link href={"/admin/types"} className="">
-      <UserRoundCog className="text-lime-400" />
+      <UserRoundCog className="text-violet-400" />
     </Link>
   );
 }

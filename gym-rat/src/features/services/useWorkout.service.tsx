@@ -10,14 +10,13 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useContext } from "react";
-import { WorkoutService } from "./workouts.service";
 
 export default function useWorkoutService() {
   const user = useContext(UserContext);
   const queryClient = useQueryClient();
 
   // GET
-  const getAll = (enabled: boolean) => {
+  const useGetAll = (enabled: boolean) => {
     const { data, isLoading } = useQuery({
       queryKey: ["UseWorkoutService", "getAll"],
       enabled: enabled,
@@ -26,10 +25,10 @@ export default function useWorkoutService() {
     return { data, isLoading };
   };
 
-  const getByPage = (enabled: boolean) => {
+  const useGetByPage = (enabled: boolean) => {
     const { data, isLoading, error, fetchNextPage, refetch } = useInfiniteQuery(
       {
-        queryKey: ["UseWorkoutService", "getByPage"],
+        queryKey: ["UseWorkoutService"],
         queryFn: WorkoutEndpoints.getByPage,
         enabled: enabled,
         initialPageParam: 1,
@@ -42,7 +41,7 @@ export default function useWorkoutService() {
     const isNextPage = !!data?.pages[data.pageParams.length - 1].length;
     return { data, isNextPage, isLoading, error, fetchNextPage, refetch };
   };
-  const getById = (id: string, enabled: boolean) => {
+  const useGetById = (id: string, enabled: boolean) => {
     const { data, isLoading } = useQuery({
       queryKey: ["UseWorkoutService", "getById"],
       enabled: enabled,
@@ -50,30 +49,56 @@ export default function useWorkoutService() {
     });
     return { data, isLoading };
   };
+  const useFind = (value: string, enabled: boolean) => {
+    const { data, isLoading } = useQuery({
+      queryKey: ["UseWorkoutService", "find"],
+      enabled: enabled,
+      queryFn: () => WorkoutEndpoints.find(value),
+    });
+    return { data, isLoading };
+  };
 
   // POST
-  const createWorkout = () => {
-    const postWorkout = useMutation({
+  const useCreateWorkout = () => {
+    const mutation = useMutation({
       mutationKey: ["UseWorkoutService", "post"],
       mutationFn: async (data: iWorkout) => {
-        await WorkoutService.postWorkout({
+        await WorkoutEndpoints.postWorkout({
           ...data,
           user_id: user?.userData?._id as string,
         });
       },
       onSuccess() {
         queryClient.invalidateQueries([
-          ["UseWorkoutService", "post"],
+          ["UseWorkoutService"],
         ] as InvalidateQueryFilters);
       },
     });
-    return postWorkout;
+    return mutation;
   };
 
+  // DELETE
+  const deleteWorkout = useMutation({
+    mutationKey: ["UseWorkoutService", "delete"],
+    mutationFn: async (workoutId: string) => {
+      await WorkoutEndpoints.deleteWorkout(workoutId);
+    },
+    onSuccess() {
+      queryClient.invalidateQueries([
+        ["UseWorkoutService"],
+      ] as InvalidateQueryFilters);
+    },
+  });
+
   return {
-    get: { getAll, getByPage, getById },
-    post: { createWorkout },
+    get: {
+      getAll: useGetAll,
+      getByPage: useGetByPage,
+      getById: useGetById,
+      find: useFind,
+    },
+    post: { createWorkout: useCreateWorkout },
     put: {},
-    delete: {},
+    delete: { deleteWorkout },
   };
 }

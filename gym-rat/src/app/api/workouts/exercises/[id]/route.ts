@@ -1,4 +1,4 @@
-import WorkoutExercisesModel from "@/features/models/WorkoutExercisesModel";
+import WorkoutExercisesModel from "@/features/models/workoutExercisesModel";
 import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
 import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
 import connectMongoDB from "@/lib/mongodb";

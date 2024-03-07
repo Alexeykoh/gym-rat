@@ -1,5 +1,5 @@
-import UserModel from "@/features/models/UserModel";
-import WorkoutModel from "@/features/models/WorkoutModel";
+import UserModel from "@/features/models/userModel";
+import WorkoutModel from "@/features/models/workoutModel";
 import {
   iWorkout,
   iWorkoutResponse,

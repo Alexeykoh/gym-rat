@@ -1,4 +1,4 @@
-import OrderModel from "@/features/models/OrderModel";
+import OrderModel from "@/features/models/orderModel";
 import connectMongoDB from "@/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";

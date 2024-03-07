@@ -14,7 +14,7 @@ export default function UserBento({ name, role }: iUserBento) {
       </div>
       <div className="">
         <p className="">{name}</p>
-        <p className={role === enumUserRole.admin ? " text-lime-400 " : ""}>
+        <p className={role === enumUserRole.admin ? " text-violet-400 " : ""}>
           {role}
         </p>
       </div>
