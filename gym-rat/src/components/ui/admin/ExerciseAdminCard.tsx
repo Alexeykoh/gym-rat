@@ -1,25 +1,23 @@
 "use client";
 
-import { iExercise } from "@/models/ExerciseModel";
+import { iExercise } from "@/lib/interfaces/Exercise.interface";
 import { FilePenLine, Trash2 } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import TextBadge, { enumTextBadge } from "../../../shared/ui/badges/TextBadge";
 import ContextMenu from "../ContextMenu";
 
 interface ExerciseAdminCardProps extends iExercise {
-  removeExercise: () => any;
-  updateExercise: () => any;
+  removeExercise: () => void;
+  updateExercise: () => void;
   isLoading: boolean;
 }
 
 const ExerciseAdminCard: FC<ExerciseAdminCardProps> = ({
   _id,
-  type_id,
   name,
   description,
   removeExercise,
   updateExercise,
-  isLoading,
 }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   useEffect(() => {
@@ -36,7 +34,7 @@ const ExerciseAdminCard: FC<ExerciseAdminCardProps> = ({
         <div className="flex flex-col">
           <div className="flex flex-col gap-2 ">
             <p className="font-semibold text-2xl">{name}</p>
-            <TextBadge value={_id} type={enumTextBadge.Normal} />
+            <TextBadge value={_id as string} type={enumTextBadge.Normal} />
           </div>
           <p>{description}</p>
         </div>

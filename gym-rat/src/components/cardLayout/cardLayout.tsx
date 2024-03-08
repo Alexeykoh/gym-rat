@@ -17,8 +17,8 @@ const CardLayout: FC<cardLayoutProps> = ({ children, isSelected }) => {
     <div
       className={
         (isSelected ? " bg-lime-400 text-black " : " bg-zinc-900 ") +
-        (isVisible ? " opacity-100 " : " opacity-0") +
-        " px-4 py-4 rounded-2xl flex justify-between gap-4 items-center w-full h-full max-w-96 duration-500 "
+        (isVisible ? " opacity-100 shadow-lg  " : " opacity-0 shadow-none ") +
+        " px-4 py-4 rounded-2xl flex justify-between gap-4 items-center w-full h-full max-w-96 duration-500"
       }
     >
       {children}

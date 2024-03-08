@@ -1,5 +1,7 @@
+import ExerciseModel from "@/features/models/exerciseModel";
+import { iExercise } from "@/lib/interfaces/Exercise.interface";
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseModel, { iExercise } from "@/models/ExerciseModel";
+
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 

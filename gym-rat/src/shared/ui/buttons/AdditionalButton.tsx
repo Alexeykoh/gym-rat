@@ -1,12 +1,14 @@
 "use client";
 
-import { FC } from "react";
+import { FC, MutableRefObject, ReactNode } from "react";
 
 type ActionButtonProps = {
   busy?: boolean;
-  action?: any;
-  text?: any;
+  action?: () => void;
+  text?: ReactNode | string;
   type?: "submit" | "reset" | "button" | undefined;
+  triggerRef?: MutableRefObject<HTMLButtonElement | null> | undefined;
+  isVisible?: boolean;
 };
 
 const AdditionalButton: FC<ActionButtonProps> = ({
@@ -14,10 +16,13 @@ const AdditionalButton: FC<ActionButtonProps> = ({
   action,
   text,
   type,
+  triggerRef,
+  isVisible,
 }) => {
   return (
     <>
       <button
+        ref={triggerRef}
         onClick={() => {
           if (action) {
             action();
@@ -25,10 +30,8 @@ const AdditionalButton: FC<ActionButtonProps> = ({
         }}
         type={type || "submit"}
         className={
-          (busy
-            ? " bg-zinc-400 lg:hover:bg-zinc-300 "
-            : " bg-zinc-600 lg:hover:bg-zinc-600 ") +
-          " p-3 mt-4 rounded-xl text-xl text-black flex items-center w-full justify-center"
+          (!isVisible && " hidden ") +
+          " p-3 mt-4 rounded-xl text-xl text-black flex items-center w-full justify-center bg-zinc-800"
         }
       >
         {!busy ? (

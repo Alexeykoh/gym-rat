@@ -1,12 +1,12 @@
+import UserModel from "@/features/models/userModel";
 import { iUserData } from "@/lib/interfaces/User.interface";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/UserModel";
-import { getServerSession } from "next-auth";
+
 import { NextResponse } from "next/server";
 
 export async function POST(req: any) {
   try {
-    const session = await getServerSession(req);
+    // const session = await getServerSession(req);
     // Check if the user is authenticated
     // console.log("session", session);
     // if (!session) {

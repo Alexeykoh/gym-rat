@@ -9,7 +9,7 @@ export enum enumTextBadge {
   Admin = " bg-lime-300 text-lime-800 border-lime-400 ",
 }
 type TextBadgeProps = {
-  value: any;
+  value: string;
   type: enumTextBadge;
 };
 

@@ -1,29 +1,54 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import { FC } from "react";
+import { useNavContext } from "@/lib/context/nav-context";
+import BentoBox from "@/shared/ui/bento-grid/bento-box";
+import BentoCell from "@/shared/ui/bento-grid/bento-cell";
+import {
+  enumBentoCellHeight,
+  enumBentoCellWidth,
+} from "@/shared/ui/bento-grid/bento.interface";
+import { Gauge, PersonStanding } from "lucide-react";
 //
 
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import infoIcon from "../../../../public/icons/Info.svg";
-import logOutIcon from "../../../../public/icons/LogOut.svg";
-import privacyIcon from "../../../../public/icons/Privacy.svg";
-import mainIcon from "../../../../public/icons/gym-rat-icon.png";
-import userIcon from "../../../../public/icons/userInfo.svg";
-//
-type pageProps = {};
-
-const Account: FC<pageProps> = () => {
-  //
-  const { data, status }: any = useSession();
-  const name = data?.user?.name;
-  const email = data?.user?.email;
-  const role = data?.user?.role;
-  //
+export default function Account() {
+  const {} = useNavContext("account");
   return (
     <>
-      <div className="w-full flex flex-col gap-8 items-center justify-between max-w-96 self-center pt-4">
+      <BentoBox>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w1, h: enumBentoCellHeight.h1 }}
+        >
+          <div className="flex flex-col gap-2">
+            <p>Вес</p>
+            <Gauge />
+          </div>
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w2, h: enumBentoCellHeight.h1 }}
+        >
+          <div className="flex flex-col gap-2 items-center">
+            <p>Норма ккал.</p>
+            <PersonStanding />
+          </div>
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w2, h: enumBentoCellHeight.h1 }}
+        >
+          <div className="flex flex-col gap-2">
+            <p>Вес</p>
+            <Gauge />
+          </div>
+        </BentoCell>
+        <BentoCell
+          size={{ w: enumBentoCellWidth.w1, h: enumBentoCellHeight.h1 }}
+        >
+          <div className="flex flex-col gap-2">
+            <p>Вес</p>
+            <Gauge />
+          </div>
+        </BentoCell>
+      </BentoBox>
+
+      {/* <div className="w-full flex flex-col gap-8 items-center justify-between max-w-96 self-center pt-4">
         <div className="flex flex-col gap-2 items-center w-full">
           <div className="min-w-40 min-h-40 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden">
             <Image src={mainIcon} alt={"icon"} width={180} height={180} />
@@ -68,9 +93,7 @@ const Account: FC<pageProps> = () => {
             <p className="">Log out</p>
           </button>
         </div>
-      </div>
+      </div> */}
     </>
   );
-};
-
-export default Account;
+}

@@ -1,14 +1,13 @@
 "use client";
 import CardLayout from "@/components/cardLayout/cardLayout";
-import { apiEndpoints } from "@/lib/endpoints/apiEndpoints";
-import { localStore, localStoreEnum } from "@/lib/helpers";
-import { iExercise } from "@/models/ExerciseModel";
-import { iExerciseType } from "@/models/ExerciseTypeModel";
-import { iWorkoutExercises } from "@/models/WorkoutExercisesModel";
+import { iExercise } from "@/lib/interfaces/Exercise.interface";
+import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
+import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
+
 import ActionButton from "@/shared/ui/buttons/ActionButton";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 type pageProps = { params: { id: string } };
 enum Pages {
@@ -21,7 +20,7 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
   // const typesData = useSelector((state: RootState) => state.types);
   // const exerciseItems = useSelector((state: RootState) => state.exerciseItems);
 
-  const [types, setTypes] = useState<iExerciseType[]>([]);
+  const [types] = useState<iWorkoutExerciseType[]>([]);
   const [exercises, setExercises] = useState<iExercise[]>([]);
   const [slider, setSlider] = useState<Pages>(Pages.Types);
 
@@ -35,13 +34,10 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
   //
 
   //
-  async function getTypes() {
-    let storedData = localStorage.getItem("exerciseTypes");
-    setTypes(JSON.parse(storedData as string));
-  }
+
   function getExerciseByType(type: string | undefined) {
-    let storedData = localStorage.getItem("exerciseItems");
-    let data = JSON.parse(storedData as string);
+    const storedData = localStorage.getItem("exerciseItems");
+    const data = JSON.parse(storedData as string);
     setExercises(data.filter((item: any) => item.type_id === type));
     setSlider(Pages.Exercises);
   }
@@ -54,19 +50,6 @@ const WorkoutExercisePage: FC<pageProps> = ({ params }) => {
         router.push(`/workouts/${params.id}`);
       });
   }
-  useEffect(() => {
-    localStore({
-      name: localStoreEnum.exerciseTypes,
-      fetchData: async () => apiEndpoints.exercises.types.all(),
-      toState: setTypes,
-    });
-    localStore({
-      name: localStoreEnum.exerciseItems,
-      fetchData: async () => apiEndpoints.exercises.items.all(),
-      toState: setExercises,
-    });
-  }, []);
-
   return (
     <>
       <div className="w-full overflow-hidden lg:w-1/4">

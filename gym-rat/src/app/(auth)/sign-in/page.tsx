@@ -1,4 +1,4 @@
-import LoginForm from "@/features/forms/login-form";
+import LoginForm from "@/features/forms/loginForm/login-form";
 import Link from "next/link";
 
 export default function Login() {

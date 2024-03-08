@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/header/header";
+import Footer from "@/entities/footer/footer";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { ReactNode, Suspense } from "react";
@@ -17,8 +17,8 @@ export default function PrivateLayout({ children }: layoutProps) {
   return (
     <>
       <main className="container p-4 mx-auto flex flex-col w-full">
-        <Header />
         <Suspense fallback={<Loading />}>{children}</Suspense>
+        <Footer />
       </main>
     </>
   );
