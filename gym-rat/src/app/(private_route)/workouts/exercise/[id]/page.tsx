@@ -1,9 +1,11 @@
 "use client";
 
 import CardLayout from "@/components/cardLayout/cardLayout";
-import BackButton from "@/components/ui/BackButton";
 import ContextMenu from "@/components/ui/ContextMenu";
-import { iMeasureEnum, iOrder } from "@/lib/types";
+import {
+  iExerciseOrder,
+  iMeasureEnum,
+} from "@/lib/interfaces/ExerciseOrder.interface";
 import ActionButton from "@/shared/ui/buttons/ActionButton";
 import axios from "axios";
 import { Plus, Trash2 } from "lucide-react";
@@ -15,7 +17,7 @@ type pageProps = { params: { id: string } };
 export default function Page({ params }: pageProps) {
   const router = useRouter();
   //
-  const [orderItems, setOrderItems] = useState<iOrder[]>([]);
+  const [orderItems, setOrderItems] = useState<iExerciseOrder[]>([]);
   //
   function getOrderItems(id: string) {
     axios.get("/api/workouts/exercises/" + id + "/items").then(({ data }) => {
@@ -23,30 +25,13 @@ export default function Page({ params }: pageProps) {
       setOrderItems(data?.message);
     });
   }
-  function deleteOrderItem(id: string) {
-    const answer = confirm("Удалить подход?");
-    if (!answer) {
-      return;
-    }
-    axios.delete("/api/workouts/exercises/order_item/" + id).then((data) => {
-      getOrderItems(params.id as string);
-    });
-  }
-  //
   useEffect(() => {
     getOrderItems(params.id as string);
-  }, []);
+  }, [params.id]);
   //
   return (
     <section>
       {/* <p>{params.id}</p> */}
-      <div className="fixed bottom-8 left-8 z-40">
-        <BackButton
-          action={() => {
-            router.back();
-          }}
-        />
-      </div>
       <div className="fixed bottom-8 right-8 z-40">
         <ActionButton
           text={<Plus />}

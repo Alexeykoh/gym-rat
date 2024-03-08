@@ -10,5 +10,5 @@ export default function DateLabel({ date }: iDateLabel) {
     return new Date(date).toLocaleDateString("ru-RU");
   }, [date]);
   //
-  return <div className="text-gray-100/50 min-w-16">{formattedDate}</div>;
+  return <div className="text-gray-100/50 min-w-16 text-sm">{formattedDate}</div>;
 }

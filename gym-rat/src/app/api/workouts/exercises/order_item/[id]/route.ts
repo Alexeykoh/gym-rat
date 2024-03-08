@@ -1,6 +1,6 @@
+import OrderModel from "@/features/models/orderModel";
+import { iExerciseOrder } from "@/lib/interfaces/ExerciseOrder.interface";
 import connectMongoDB from "@/lib/mongodb";
-import { iOrder } from "@/lib/types";
-import OrderModel from "@/models/OrderModel";
 
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
@@ -19,7 +19,7 @@ export async function POST(req: any, { params }: any) {
       );
     }
     //
-    const reqParams: iOrder = await req.json();
+    const reqParams: iExerciseOrder = await req.json();
     console.log("reqParams", reqParams);
     //
     await connectMongoDB();
@@ -50,7 +50,7 @@ export async function PUT(req: any, { params }: any) {
       );
     }
     //
-    const reqParams: iOrder = await req.json();
+    const reqParams: iExerciseOrder = await req.json();
     console.log("reqParams", reqParams);
     await connectMongoDB(); // connect to BD
     //

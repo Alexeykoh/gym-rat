@@ -7,10 +7,10 @@ type exerciseCardProps = {
 
 const ExerciseCard: FC<exerciseCardProps> = ({ name, time }) => {
   const [context, setContext] = useState<boolean>(false);
-  let menuRef = useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
-    let handler = (e: any) => {
+    const handler = (e: any) => {
       // @ts-ignore
       if (!menuRef?.current?.contains(e?.target)) {
         setContext(false);

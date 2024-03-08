@@ -2,34 +2,14 @@
 
 import CardLayout from "@/components/cardLayout/cardLayout";
 import { iUserData } from "@/lib/interfaces/User.interface";
-import { iWorkout } from "@/lib/interfaces/Workouts.interface";
-import axios from "axios";
-import { FC, useEffect, useState } from "react";
+import { useState } from "react";
 
-type WorkoutPageProps = {
-  params: { id: string };
-};
+interface iWorkoutPageProps {
+  params?: { id: string };
+}
 
-const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
-  const [user, setUser] = useState<iUserData | null>(null);
-  const [workouts, setWorkouts] = useState<iWorkout[]>([]);
-  //
-  function getUserById(id: string) {
-    axios.get("/api/users/" + id).then((res: any) => {
-      setUser(res.data.users);
-    });
-  }
-  function getUserWorkouts() {
-    axios.get("/api/workouts/items?type=all").then((res) => {
-      setWorkouts(res.data.message);
-    });
-  }
-  //
-  useEffect(() => {
-    getUserById(params.id);
-    getUserWorkouts();
-  }, [params.id]);
-  //
+export default function WorkoutPage({}: iWorkoutPageProps) {
+  const [user] = useState<iUserData | null>(null);
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex gap-4 items-center">
@@ -51,6 +31,4 @@ const WorkoutPage: FC<WorkoutPageProps> = ({ params }) => {
       </div>
     </div>
   );
-};
-
-export default WorkoutPage;
+}

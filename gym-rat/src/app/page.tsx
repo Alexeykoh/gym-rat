@@ -1,6 +1,6 @@
 "use client";
 
-import Logo from "@/components/logo/logo";
+import Logo from "@/shared/ui/logo/logo";
 import { redirect } from "next/navigation";
 
 export default function Home() {

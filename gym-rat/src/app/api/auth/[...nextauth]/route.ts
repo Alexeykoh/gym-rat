@@ -1,5 +1,5 @@
+import UserModel from "@/features/models/userModel";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/UserModel";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";

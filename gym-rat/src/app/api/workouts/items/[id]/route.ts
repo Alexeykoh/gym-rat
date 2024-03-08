@@ -1,6 +1,6 @@
+import WorkoutModel from "@/features/models/workoutModel";
+import { iExercise } from "@/lib/interfaces/Exercise.interface";
 import connectMongoDB from "@/lib/mongodb";
-import { iExercise } from "@/models/ExerciseModel";
-import WorkoutModel from "@/models/WorkoutModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -25,7 +25,7 @@ export async function GET(req: any, { params }: any) {
   // });
 
   // console.log("result", result);
-  return NextResponse.json({ message: result }, { status: 200 });
+  return NextResponse.json(result, { status: 200 });
 }
 
 export async function PUT(req: any, { params }: any) {

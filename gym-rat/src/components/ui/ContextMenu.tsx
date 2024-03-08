@@ -1,24 +1,23 @@
 "use client";
-import { MoreVertical } from "lucide-react";
-import { FC, useEffect, useRef, useState } from "react";
+import { LucideIcon, MoreVertical } from "lucide-react";
+import { FC, ReactNode, useEffect, useRef, useState } from "react";
 
 type ContextMenuProps = {
-  icon?: any;
+  icon?: LucideIcon | ReactNode | string;
   data: {
     name: string;
-    icon: any | string | JSX.IntrinsicElements;
+    icon: string | LucideIcon | ReactNode;
     action: () => void;
   }[];
 };
 
-const ContextMenu: FC<ContextMenuProps> = ({ data, icon }) => {
+const ContextMenu: FC<ContextMenuProps> = ({ data }) => {
   const [context, setContext] = useState<boolean>(false);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLUListElement>(null);
   //
   useEffect(() => {
-    let handler = (e: any) => {
-      // @ts-ignore
-      if (!menuRef?.current?.contains(e?.target)) {
+    const handler = (e: MouseEvent) => {
+      if (!menuRef?.current?.contains(e.target as Node)) {
         setContext(false);
       }
     };
@@ -32,12 +31,12 @@ const ContextMenu: FC<ContextMenuProps> = ({ data, icon }) => {
   return (
     <>
       <div className="relative">
-        <span onClick={toggleContext}> {!icon ? <MoreVertical /> : icon}</span>
+        <span onClick={toggleContext}> {<MoreVertical />}</span>
         <ul
           ref={menuRef}
           className={
             (context ? " flex " : " hidden ") +
-            " flex-col absolute top-0 right-0  rounded-xl shadow-md w-max z-40 overflow-hidden  bg-gray-400"
+            " flex-col absolute top-0 right-0  rounded-xl shadow-lg w-max z-40 overflow-hidden  bg-zinc-700"
           }
         >
           {!data
@@ -52,7 +51,7 @@ const ContextMenu: FC<ContextMenuProps> = ({ data, icon }) => {
                     }}
                     className="hover:bg-gray-300 hover:text-black flex gap-2 items-center justify-start w-full py-2 px-4  "
                   >
-                    {el.icon}
+                    <span className="text-xl"> {el.icon as string}</span>
                     <p className="text-xl">{el.name}</p>
                   </li>
                 );

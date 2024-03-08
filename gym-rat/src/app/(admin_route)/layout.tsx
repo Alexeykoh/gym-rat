@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 type layoutProps = {
@@ -11,7 +11,6 @@ type layoutProps = {
 export default function AdminLayout({ children }: layoutProps) {
   const { data: session, status }: any = useSession();
   const pathname = usePathname();
-  const router = useRouter();
   if (session?.user?.role !== "admin" && status !== "loading") {
     redirect("/account");
   }

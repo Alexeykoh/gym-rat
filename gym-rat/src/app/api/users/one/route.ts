@@ -1,6 +1,6 @@
+import UserModel from "@/features/models/userModel";
 import { iUser, iUserData } from "@/lib/interfaces/User.interface";
 import connectMongoDB from "@/lib/mongodb";
-import UserModel from "@/models/UserModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -24,7 +24,7 @@ export async function GET(req: any) {
   await connectMongoDB();
   //
 
-  const usersResponse: iUser = await UserModel.findOne({ ...par });
+  const usersResponse: iUser = (await UserModel.findOne({ ...par })) as iUser;
   const readyResponse: iUserData = {
     _id: usersResponse?._id || "",
     email: usersResponse?.email || "",

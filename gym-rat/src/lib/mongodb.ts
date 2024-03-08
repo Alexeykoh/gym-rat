@@ -6,17 +6,9 @@ const connectMongoDB = async () => {
     // console.log("Mongoose is already connected to the database");
     // You can perform any additional checks or operations here
   } else {
-    mongoose
-      .connect(
-        process.env.MONGO as string,
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        } as any
-      )
-      .catch((err) => {
-        console.error("Error connecting to the database", err);
-      });
+    mongoose.connect(process.env.MONGO as string).catch((err) => {
+      console.error("Error connecting to the database", err);
+    });
   }
 };
 

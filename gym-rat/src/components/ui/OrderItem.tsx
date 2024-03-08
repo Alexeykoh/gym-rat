@@ -1,16 +1,18 @@
 "use client";
-import { iMeasureEnum, iOrder } from "@/lib/types";
-import axios from "axios";
+
+import {
+  iExerciseOrder,
+  iMeasureEnum,
+} from "@/lib/interfaces/ExerciseOrder.interface";
 import { Trash2 } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import ContextMenu from "./ContextMenu";
 
-interface OrderItemProps extends iOrder {
+interface OrderItemProps extends iExerciseOrder {
   deleteOrderItem: () => void;
 }
 
 const OrderItem: FC<OrderItemProps> = ({
-  _id,
   exercise_id,
   order,
   amount,
@@ -18,46 +20,37 @@ const OrderItem: FC<OrderItemProps> = ({
   deleteOrderItem,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [orderData, setOrderData] = useState<iOrder>({
+  const [loading] = useState<boolean>(false);
+  const [orderData, setOrderData] = useState<iExerciseOrder>({
     exercise_id: exercise_id as string,
     amount: amount,
     order: order + 1,
     measure: measure,
   });
-  //
-  function changeOrderItem(data: iOrder) {
-    setLoading(true);
-    axios
-      .put("/api/workouts/exercises/order_item/" + _id, { ...data })
-      .then((res: any) => {
-        setLoading(false);
-      });
-  }
-  //
+
   function changeSelect(measure: iMeasureEnum) {
-    setOrderData((prev: iOrder) => {
+    setOrderData((prev: iExerciseOrder) => {
       const res = {
         ...prev,
         measure: measure,
       };
-      changeOrderItem(res as iOrder);
+      // changeOrderItem(res as iExerciseOrder);
       return res;
     });
   }
   //
-  function changeInput(amount: any) {
-    // const regex = /^\d+$/;
-    // if (!regex.test(amount)) {
-    //   return;
-    // }
-    setOrderData((prev: iOrder) => {
-      return {
-        ...prev,
-        amount: amount,
-      };
-    });
-  }
+  // function changeInput(amount: number) {
+  //   // const regex = /^\d+$/;
+  //   // if (!regex.test(amount)) {
+  //   //   return;
+  //   // }
+  //   setOrderData((prev: iExerciseOrder) => {
+  //     return {
+  //       ...prev,
+  //       amount: amount,
+  //     };
+  //   });
+  // }
   //
   useEffect(() => {
     setIsVisible(true);
@@ -75,10 +68,7 @@ const OrderItem: FC<OrderItemProps> = ({
         <div className="flex flex-row gap-4 text-xl">
           <input
             type="number"
-            onChange={(e) => changeInput(e.target.value)}
-            onBlur={(e) => {
-              changeOrderItem(orderData);
-            }}
+            // onChange={(e) => changeInput(e.target.value)}
             value={orderData?.amount}
             className="text-black  w-16 border-gray-300 rounded-md p-2 text-center"
           />

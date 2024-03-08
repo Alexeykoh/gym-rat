@@ -1,13 +1,8 @@
 "use client";
-import {
-  iExerciseOrder,
-  iMeasureEnum,
-} from "@/lib/interfaces/ExerciseOrder.interface";
 import { iWorkoutExercises } from "@/lib/interfaces/WorkoutExercise.interface";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import CardLayout from "../cardLayout/cardLayout";
 
 type WorkoutExerciseProps = {
@@ -21,67 +16,26 @@ const WorkoutExercise: FC<WorkoutExerciseProps> = ({
   order,
   isSelected,
   exercise,
-  removeExercise,
 }) => {
   const router = useRouter();
-  const { data: session, status }: any = useSession();
-  const [orderItems, setOrderItems] = useState<iExerciseOrder[]>([]);
-  //
   async function storeOrders() {
     const storeName = "exerciseOrders";
-    let storedData = localStorage.getItem(storeName);
-    //
+    const storedData = localStorage.getItem(storeName);
     if (!storedData) {
       const data = await getOrderItems(exercise._id as string);
       console.log("storeOrders", data);
     }
   }
-
-  //
   async function getOrderItems(id: string) {
     return axios
       .get("/api/workouts/exercises/" + id + "/items")
       .then(({ data }) => {
-        // setOrderItems(data?.message);
-        console.log("getOrderItems", data);
         return data?.message;
       });
   }
-  //
-  function deleteOrderItem(id: string) {
-    const answer = confirm("Удалить подход?");
-    if (!answer) {
-      return;
-    }
-    axios.delete("/api/workouts/exercises/order_item/" + id).then((data) => {
-      getOrderItems(exercise._id as string);
-    });
-  }
-  //
-  function createNewOrder() {
-    const answer = confirm("Добавить новый подход?");
-    if (!answer) {
-      return;
-    }
-    const orderData: iOrder = {
-      exercise_id: exercise._id as string,
-      amount: 0,
-      order: orderItems.length,
-      measure: iMeasureEnum.kg,
-    };
-    axios
-      .post("/api/workouts/exercises/order_item/" + exercise._id, {
-        ...orderData,
-      })
-      .then((data) => {
-        getOrderItems(exercise._id as string);
-      });
-  }
   useEffect(() => {
-    // getOrderItems(exercise._id as string);
     storeOrders();
-  }, []);
-  //
+  }, [storeOrders]);
   return (
     <>
       <CardLayout isSelected={isSelected}>

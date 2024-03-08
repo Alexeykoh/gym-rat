@@ -1,6 +1,6 @@
+import ExerciseTypeModel from "@/features/models/exerciseTypeModel";
+import { iWorkoutExerciseType } from "@/lib/interfaces/WorkoutExerciseType.interface";
 import connectMongoDB from "@/lib/mongodb";
-import ExerciseModel from "@/models/ExerciseModel";
-import ExerciseTypeModel, { iExerciseType } from "@/models/ExerciseTypeModel";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -34,7 +34,7 @@ export async function PUT(req: any, { params }: any) {
       );
     }
     //
-    const reqParams: iExerciseType = await req.json();
+    const reqParams: iWorkoutExerciseType = await req.json();
     await connectMongoDB(); // connect to BD
     //
     const update = await ExerciseTypeModel.findOneAndUpdate(
@@ -66,7 +66,6 @@ export async function DELETE(req: any, { params }: any) {
     }
     //
     await connectMongoDB();
-    const deleteBounce = await ExerciseModel.deleteMany({ type_id: params.id });
     await ExerciseTypeModel.findByIdAndDelete(params.id);
     return NextResponse.json(
       { message: "Exercise was delete" },
